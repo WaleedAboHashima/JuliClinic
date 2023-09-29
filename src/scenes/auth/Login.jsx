@@ -128,7 +128,7 @@ const Login = () => {
         borderRadius={10}
         backgroundColor={theme.palette.background.alt}
         padding="20px" // Add some padding
-        width={{ xs: "100%", sm: "80%", md: "60%", lg: "50%" }} // Use responsive width
+        width={{ xs: "100%", sm: "80%", md: "60%", lg: "40%", xl: '30%' }} // Use responsive width
         textAlign={context.language === "en" ? "right" : "left"}
       >
         <Box>

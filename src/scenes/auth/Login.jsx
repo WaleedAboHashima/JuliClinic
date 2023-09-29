@@ -67,7 +67,10 @@ const Login = () => {
     dispatch(LoginHandler({ email: email, pwd: password })).then((res) => {
       if (res.payload) {
         if (res.payload.status === 200) {
-          if (res.payload.data.user.role === "Admin" || res.payload.data.user.role === "User") {
+          if (
+            res.payload.data.user.role === "Admin" ||
+            res.payload.data.user.role === "User"
+          ) {
             const decoded = jwt(res.payload.data.token);
             cookies.set("_auth_token", res.payload.data.token, {
               expires: new Date(decoded.exp * 1000),
@@ -92,7 +95,9 @@ const Login = () => {
           }
         } else if (res.payload.status === 400) {
           setError(
-            context.language === "en" ? "Password is incorrect." : "كلمه المرور غير صحيحه"
+            context.language === "en"
+              ? "Password is incorrect."
+              : "كلمه المرور غير صحيحه"
           );
         } else if (res.payload.status === 404) {
           setError(
@@ -115,15 +120,15 @@ const Login = () => {
     <Box
       display="flex"
       alignItems="center"
-      height="100vh"
-      width="100vw"
       justifyContent="center"
+      minHeight="100vh" // Change height to minHeight
+      padding="20px" // Add some padding
     >
       <Box
         borderRadius={10}
         backgroundColor={theme.palette.background.alt}
-        p="10px 10px 10px 10px"
-        width="30%"
+        padding="20px" // Add some padding
+        width={{ xs: "100%", sm: "80%", md: "60%", lg: "50%" }} // Use responsive width
         textAlign={context.language === "en" ? "right" : "left"}
       >
         <Box>
@@ -157,7 +162,12 @@ const Login = () => {
           width="100%"
         >
           <Box width="100%" height="auto" textAlign="center">
-            <img style={{ borderRadius: 999 }} src={theme.palette.mode === "dark" ? logoDark : logo} width="50%" alt="company-logo"/>
+            <img
+              style={{ borderRadius: 999 }}
+              src={theme.palette.mode === "dark" ? logoDark : logo}
+              width="50%"
+              alt="company-logo"
+            />
           </Box>
           {/* Container */}
           <Formik
@@ -266,7 +276,7 @@ const Login = () => {
                     variant="filled"
                   >
                     {state.loading ? (
-                      <CircularProgress color="primary" size={25}/>
+                      <CircularProgress color="primary" size={25} />
                     ) : context.language === "en" ? (
                       "Sign In"
                     ) : (

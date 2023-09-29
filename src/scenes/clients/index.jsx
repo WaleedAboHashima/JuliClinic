@@ -74,16 +74,18 @@ const Clients = () => {
   const [lastName, setLastName] = useState();
   const [phone, setPhone] = useState();
   const [country, setCountry] = useState();
+
   const [orders, setOrders] = useState([]);
   const columns = [
     {
       field: "id",
       headerName: "ID",
+      flex: 0.5
     },
     {
       field: "name",
       headerName: context.language === "en" ? "Name" : "الاسم",
-      flex: 0.5,
+      flex: 1,
       valueGetter: ({ row }) =>
         `${row.firstName} ${row.middleName} ${row.lastName}`,
     },
@@ -167,6 +169,13 @@ const Clients = () => {
     },
   ];
 
+  const breakpoints = {
+    xs: 0, // Extra small screens (phones)
+    sm: 600, // Small screens (tablets)
+    md: 960, // Medium screens (laptops)
+    lg: 1280, // Large screens (desktops)
+  };
+
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
 
@@ -233,15 +242,32 @@ const Clients = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+        paddingX={2} // Adjust padding as needed
+      >
+        {/* Header */}
         <Header
           title={context.language === "en" ? "Clients" : "عملاء"}
           subtitle={
             context.language === "en" ? "List of clients" : "قائمه العملاء"
           }
         />
-        <Box>
-          <FlexBetween>
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }} // Adjust the layout for different screen sizes
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%"
+          marginBottom={2} // Add margin between elements
+        >
+          <Box marginBottom={{ xs: 2, sm: 0 }}>
+            {" "}
+            {/* Adjust margin */}
             <Formik
               initialValues={{ code: "" }}
               onSubmit={() => handleSearch()}
@@ -272,24 +298,21 @@ const Clients = () => {
                 </form>
               )}
             </Formik>
-            <Button
-              sx={{
-                display:
-                  cookies.get("_auth_role") === "Admin"
-                    ? "inlineblock"
-                    : "none",
-                backgroundColor: theme.palette.primary[600],
-                color: theme.palette.secondary[200],
-                fontSize: "14px",
-                fontWeight: "bold",
-                p: "10px 20px",
-              }}
-              onClick={() => navigator("/addclient")}
-            >
-              {context.language === "en" ? "Add Client" : "اضافه عملاء"}
-              <AddOutlined sx={{ mr: "10px" }} />
-            </Button>
-          </FlexBetween>
+          </Box>
+          <Button
+            sx={{
+              backgroundColor: theme.palette.primary[600],
+              color: theme.palette.secondary[200],
+              fontSize: "14px",
+              fontWeight: "bold",
+              p: "10px 20px",
+              marginLeft: { xs: 0, sm: 2 }, // Adjust margin
+            }}
+            onClick={() => navigator("/addclient")}
+          >
+            {context.language === "en" ? "Add Client" : "اضافه عملاء"}
+            <AddOutlined sx={{ mr: "10px" }} />
+          </Button>
         </Box>
       </Box>
       <Box mt="40px" height="75vh">
@@ -304,11 +327,6 @@ const Clients = () => {
             id: index + 1,
             ...user,
           }))}
-          // sx={{
-          //   "& .MuiDataGrid-virtualScroller": {
-          //     backgroundColor: theme.palette.primary[500],
-          //   },
-          // }}
           columns={
             isAdmin
               ? columns
@@ -317,7 +335,7 @@ const Clients = () => {
         />
       </Box>
       <Dialog
-      dir={isArabic && "rtl"}
+        dir={isArabic && "rtl"}
         open={formOpen}
         onClose={() => setFormOpen(!formOpen)}
         aria-labelledby="alert-dialog-title"
@@ -329,11 +347,15 @@ const Clients = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {isArabic ? "هل انت متأكد بأنك تريد حذف هذا المستخدم؟" : "Are you sure you want to delete this user?"}
+            {isArabic
+              ? "هل انت متأكد بأنك تريد حذف هذا المستخدم؟"
+              : "Are you sure you want to delete this user?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setFormOpen(!formOpen)}>{isArabic ? "ألغاء" : "Cancel"}</Button>
+          <Button onClick={() => setFormOpen(!formOpen)}>
+            {isArabic ? "ألغاء" : "Cancel"}
+          </Button>
           <Button
             onClick={() => handleDelete(userDetails._id)}
             autoFocus
@@ -530,7 +552,9 @@ const Clients = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditOpen(!editOpen)}>{isArabic ? "ألغاء" : "Cancel"}</Button>
+          <Button onClick={() => setEditOpen(!editOpen)}>
+            {isArabic ? "ألغاء" : "Cancel"}
+          </Button>
           <Button onClick={() => handleEdit()} autoFocus color="success">
             {isArabic ? "تعديل" : "Edit"}
           </Button>

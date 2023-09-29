@@ -164,13 +164,13 @@ const AddEmployee = () => {
               sx={
                 context.language === "ar"
                   ? {
-                      width: "30%",
+                      width: {xs: "100%" , md: "30%"},
                       "& .MuiSvgIcon-root": {
                         left: "7px",
                         right: "auto",
                       },
                     }
-                  : { width: "30%" }
+                  : { width: {xs: "100%" , md: "30%"}}
               }
               defaultValue={0}
               onChange={(e) => {
@@ -252,7 +252,7 @@ const AddEmployee = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       gap: 10,
-                      width: "30%",
+                      width: "70%",
                     }}
                   >
                     <Select
@@ -362,7 +362,7 @@ const AddEmployee = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       gap: 10,
-                      width: "30%",
+                      width: "70%",
                     }}
                   >
                     <Select
@@ -476,7 +476,7 @@ const AddEmployee = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       gap: 10,
-                      width: "30%",
+                      width: "70%",
                     }}
                   >
                     <Select
@@ -590,7 +590,7 @@ const AddEmployee = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       gap: 10,
-                      width: "30%",
+                      width: "70%",
                     }}
                   >
                     <Select
@@ -702,7 +702,7 @@ const AddEmployee = () => {
                       alignItems: "center",
                       flexDirection: "column",
                       gap: 10,
-                      width: "30%",
+                      width: "70%",
                     }}
                   >
                     <Select

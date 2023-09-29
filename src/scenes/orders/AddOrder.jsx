@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
 import Header from "components/Header";
 import { LanguageContext } from "language";
 import React, { useContext, useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { AddOrdersHandler } from "apis/Orders/AddOrders";
 import { GetClientsHandler } from "apis/data/Clients/GetClients";
+import { useTheme } from "@emotion/react";
 const AddOrder = () => {
   const context = useContext(LanguageContext);
   const dispatch = useDispatch();
@@ -31,9 +32,11 @@ const AddOrder = () => {
   const [time, setTime] = useState(dayjs(new Date()));
   const [additionalFields, setAdditionalFields] = useState([]);
   const [clients, setClients] = useState([]);
+  const theme = useTheme();
   const [selectedClient, setSelectedClient] = useState(1);
   const [amountPaid, setAmoundPaid] = useState();
   const [selectedAssistances, setSelectedAssistances] = useState([""]);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleAddSubmit = () => {
     const additionalInfo = additionalFields.map((field) => {
@@ -128,7 +131,7 @@ const AddOrder = () => {
       </Box>
       <Box display={"flex"} alignItems={"center"} height={"100vh"} gap={20}>
         <img
-          style={{ width: 450, height: 450 }}
+          style={{ width: 450, height: 450, display: isMobile && "none" }}
           src={OrdersLogo}
           alt="orderLogo"
         />

@@ -53,6 +53,7 @@ const Attendance = () => {
   const [date, setDate] = useState(dayjs(new Date()));
   const [type, setType] = useState("daily");
   const state = useSelector((state) => state.GetAttendance);
+  
   const columns = [
     {
       field: "id",
@@ -160,7 +161,7 @@ const Attendance = () => {
   };
 
   useEffect(() => {
-    dispatch(GetAttendanceHandler({type, day, year, month})).then((res) => {
+    dispatch(GetAttendanceHandler({ type, day, year, month })).then((res) => {
       if (res.payload) {
         if (res.payload.status === 200) {
           setRows(res.payload.data.attendances);
@@ -174,6 +175,7 @@ const Attendance = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
+        flexDirection={{xs: 'column', md: 'row'}}
         alignItems={"center"}
       >
         <Header
@@ -217,39 +219,7 @@ const Attendance = () => {
           </Button>
         </Box>
       </Box>
-      <Box
-        height="75vh"
-        // sx={{
-        //   "& .MuiDataGrid-root": {
-        //     border: "none",
-        //   },
-        //   "& .MuiDataGrid-cell": {
-        //     borderBottom: "none",
-        //   },
-        //   "& .MuiDataGrid-columnHeaders": {
-        //     backgroundColor: theme.palette.background.alt,
-        //     color: theme.palette.secondary[100],
-        //     borderBottom: "none",
-        //   },
-        //   "& .MuiDataGrid-virtualScroller": {
-        //     backgroundColor: theme.palette.primary.light,
-        //   },
-        //   "& .MuiDataGrid-footerContainer": {
-        //     backgroundColor: theme.palette.background.alt,
-        //     color: theme.palette.secondary[100],
-        //     borderTop: "none",
-        //   },
-        //   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-        //     color: `${theme.palette.secondary[200]} !important`,
-        //   },
-        //   "& .MuiDataGrid-toolbarContainer": {
-        //     backgroundColor:
-        //       theme.palette.mode === "dark"
-        //         ? theme.palette.primary[500]
-        //         : "#e0e0e0",
-        //   },
-        // }}
-      >
+      <Box height="75vh">
         <Box display={"flex"} justifyContent={"center"} gap={2} p={2}>
           <Select
             value={type}
@@ -292,7 +262,7 @@ const Attendance = () => {
           >
             <CircularProgress sx={{ color: "white" }} />
           </Box>
-        ) : rows.length  ? (
+        ) : rows.length ? (
           <DataGrid
             autoPageSize
             disableSelectionOnClick

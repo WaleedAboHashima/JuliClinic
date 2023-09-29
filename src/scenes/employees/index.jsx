@@ -250,6 +250,8 @@ const Staff = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
+        flexDirection={{ xs: "column", sm: "row" }} 
+        gap={{xs: 6}}
         alignItems={"center"}
       >
         <Header
@@ -437,13 +439,13 @@ const Staff = () => {
         </DialogContent>
       </Dialog>
       <Dialog
-      dir={context.language === "en" ? "ltr" : "rtl"}
+        dir={context.language === "en" ? "ltr" : "rtl"}
         open={editOpen}
         onClose={() => setEditOpen(!editOpen)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title" >
+        <DialogTitle id="alert-dialog-title">
           {context.language === "en" ? (
             <Box>
               Edit{" "}
@@ -453,11 +455,11 @@ const Staff = () => {
             </Box>
           ) : (
             <Box>
-            تعديل{" "}
-            <span style={{ color: theme.palette.primary[400] }}>
-              {userdetails.name}؟
-            </span>
-          </Box>
+              تعديل{" "}
+              <span style={{ color: theme.palette.primary[400] }}>
+                {userdetails.name}؟
+              </span>
+            </Box>
           )}
         </DialogTitle>
         <DialogContent>
@@ -501,20 +503,28 @@ const Staff = () => {
               />
             )}
             <Select
-            sx={context.language === "ar" &&{ 
-              "& .MuiSvgIcon-root" : {
-                left: '7px',
-                right: 'auto'
+              sx={
+                context.language === "ar" && {
+                  "& .MuiSvgIcon-root": {
+                    left: "7px",
+                    right: "auto",
+                  },
+                }
               }
-            }}
               fullWidth
               value={way}
               onChange={(e) => setWay(e.target.value)}
             >
-              <MenuItem dir={context.language === "en" ? "ltr" : "rtl"} value={"fixed"}>
+              <MenuItem
+                dir={context.language === "en" ? "ltr" : "rtl"}
+                value={"fixed"}
+              >
                 {context.language === "en" ? "Fixed" : "ثابت"}
               </MenuItem>
-              <MenuItem dir={context.language === "en" ? "ltr" : "rtl"} value={"com"}>
+              <MenuItem
+                dir={context.language === "en" ? "ltr" : "rtl"}
+                value={"com"}
+              >
                 {context.language === "en" ? "Commission" : "عموله"}
               </MenuItem>
             </Select>

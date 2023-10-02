@@ -57,13 +57,6 @@ const Dashboard = () => {
       flex: 1,
     },
     {
-      field: "clientName",
-      headerName: context.language === "ar" ? "اسم العميل" : "Client Name",
-      flex: 1,
-      valueGetter: (value) =>
-        `${value.row.clientFirstName} ${value.row.clientLastName}`,
-    },
-    {
       field: "code",
       headerName: context.language === "en" ? "Client Code" : "كود العميل",
       flex: 1,
@@ -280,7 +273,7 @@ const Dashboard = () => {
             localeText={context.language === "ar" && arabicLocaleText}
             loading={state.loading}
             autoPageSize
-            checkboxSelection
+            
             rows={
               (data &&
                 data.Services.map((service, index) => ({
@@ -341,7 +334,7 @@ const Dashboard = () => {
             autoPageSize
             localeText={context.language === "ar" && arabicLocaleText}
             loading={state.loading}
-            checkboxSelection
+            
             rows={
               (data &&
                 data.TopClients.map((client, index) => ({

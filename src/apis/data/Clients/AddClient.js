@@ -21,11 +21,10 @@ export const AddClientHandler = createAsyncThunk(
       const response = await axios.post(
         api,
         {
-          firstName: arg.firstName,
-          middleName: arg.middleName,
-          lastName: arg.lastName,
+          full_name: arg.fullName,
           phone: arg.phone,
-          country: arg.country
+          country: arg.country,
+          governorate: arg.governorate,
         },
         { headers: { Authorization: `Bearer ${cookies.get("_auth_token")}` } }
       );

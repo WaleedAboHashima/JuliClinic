@@ -1,10 +1,10 @@
-import { Box, Button, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
 import Header from "components/Header";
 import { LanguageContext } from "language";
 import React, { useContext, useEffect, useState } from "react";
 import OrdersLogo from "assets/orders.svg";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GetStaffHandler } from "apis/data/Staff/GetStaff";
 import { GetServicesHandler } from "apis/Services/GetServices";
 import { currencies } from "constant";
@@ -24,6 +24,7 @@ const AddOrder = () => {
   const [doctors, setDoctors] = useState([]);
   const [assistances, setAssistances] = useState([]);
   const [services, setServices] = useState([]);
+  const state = useSelector(state => state.AddOrder)
   const [selectedServices, setSelectedServices] = useState(1);
   const [currency, setCurrency] = useState("EGP");
   const [selectedDoctor, setSelectedDoctor] = useState(1);
@@ -54,7 +55,7 @@ const AddOrder = () => {
     const month = date.$M + 1;
     const hour = time.$H;
     const minute = time.$m;
-    const newTime = `${hour}-${minute}`
+    const newTime = `${hour}:${minute}`
     const formatted = `${day}-${month}-${year}`;
     dispatch(
       AddOrdersHandler({
@@ -123,9 +124,9 @@ const AddOrder = () => {
         alignItems={"center"}
       >
         <Header
-          title={context.language === "en" ? "Add Orders" : "اضافه طلبات"}
+          title={context.language === "en" ? "Add Appointments" : "اضافه مواعيد"}
           subtitle={
-            context.language === "en" ? "Add orders below" : "اضافه طلبات"
+            context.language === "en" ? "Add Appointments below" : "اضافه مواعيد"
           }
         />
       </Box>
@@ -189,7 +190,7 @@ const AddOrder = () => {
               {clients.length &&
                 clients.map((client) => (
                   <MenuItem key={client._id} value={client._id}>
-                    {`${client.firstName} ${client.middleName} ${client.lastName}`}
+                    {`${client.full_name}`}
                   </MenuItem>
                 ))}
             </Select>
@@ -325,7 +326,7 @@ const AddOrder = () => {
               }
               variant="contained"
             >
-              {context.language === "en" ? "Submit" : "أستمرار"}
+              {state.loading ? <CircularProgress size={20} sx={{color: 'white'}} /> : context.language === "en" ? "Submit" : "أستمرار"}
             </Button>
           </form>
         </Box>

@@ -24,9 +24,9 @@ import {
   ChevronRight,
   AccessTimeFilledOutlined,
   Inventory2Outlined,
-  LocalShippingOutlined,
   PersonOutlined,
   ReportGmailerrorredRounded,
+  ListOutlined
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -75,8 +75,8 @@ const Sidebar = ({
       url: "clients",
     },
     {
-      text: context.language === "en" ? "Orders" : "الطلبات",
-      icon: <LocalShippingOutlined />,
+      text: context.language === "en" ? "Appointments" : "المواعيد",
+      icon: <ListOutlined />,
       url: "orders",
     },
     {
@@ -134,8 +134,8 @@ const Sidebar = ({
       url: "clients",
     },
     {
-      text: context.language === "en" ? "Orders" : "الطلبات",
-      icon: <LocalShippingOutlined />,
+      text: context.language === "en" ? "Appointments" : "المواعيد",
+      icon: <ListOutlined />,
       url: "orders",
     },
   ];

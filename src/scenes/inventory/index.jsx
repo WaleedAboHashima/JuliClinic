@@ -239,7 +239,7 @@ const Inventory = () => {
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          checkboxSelection
+          
           loading={loading}
           localeText={context.language === "en" ? null : arabicLocaleText}
           components={{ Toolbar: GridToolbar }}

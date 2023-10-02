@@ -14,16 +14,15 @@ import UserLogo from "assets/addclients.svg";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { AddClientHandler } from "apis/data/Clients/AddClient";
-import { countries } from "constant";
+import { countries, egyptGovernorates } from "constant";
 
 const AddClient = () => {
   const context = useContext(LanguageContext);
   const dispatch = useDispatch();
-  const [firstName, setFirstName] = useState();
-  const [middleName, setMiddleName] = useState();
-  const [lastName, setLastName] = useState();
+  const [fullName, setFullName] = useState();
   const [phone, setPhone] = useState();
-  const [country, setCountry] = useState("none");
+  const [selectedCountry, setSelectedCountry] = useState("none");
+  const [selectedGovernment, setSelectedGovernment] = useState("none");
   const state = useSelector((state) => state.AddClient);
   const [error, setError] = useState("");
 
@@ -38,14 +37,11 @@ const AddClient = () => {
     },
   };
 
-
   //Function
 
   const handleAddUser = () => {
     setError("");
-    dispatch(
-      AddClientHandler({ firstName, middleName, lastName, phone, country })
-    ).then((res) => {
+    dispatch(AddClientHandler({ fullName, phone, country: selectedCountry, governorate: selectedGovernment })).then((res) => {
       if (res.payload.status === 201) {
         window.location.pathname = "/clients";
       } else {
@@ -94,9 +90,7 @@ const AddClient = () => {
           <Formik
             onSubmit={() => handleAddUser()}
             initialValues={{
-              firstName: "",
-              middleName: "",
-              lastName: "",
+              fullName: "",
               phone: "",
               country: "",
             }}
@@ -115,35 +109,13 @@ const AddClient = () => {
               >
                 <TextField
                   dir={context.language === "en" ? "ltr" : "rtl"}
-                  name="firstName"
-                  value={values.firstName}
+                  name="fullName"
+                  value={values.fullName}
                   onChange={handleChange}
-                  onChangeCapture={(e) => setFirstName(e.target.value)}
+                  onChangeCapture={(e) => setFullName(e.target.value)}
                   fullWidth
                   placeholder={
                     context.language === "en" ? "First Name" : "الاسم"
-                  }
-                />
-                <TextField
-                  dir={context.language === "en" ? "ltr" : "rtl"}
-                  name="middleName"
-                  value={values.middleName}
-                  onChange={handleChange}
-                  onChangeCapture={(e) => setMiddleName(e.target.value)}
-                  fullWidth
-                  placeholder={
-                    context.language === "en" ? "Middle Name" : "الاسم الاوسط"
-                  }
-                />
-                <TextField
-                  dir={context.language === "en" ? "ltr" : "rtl"}
-                  name="lastName"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  onChangeCapture={(e) => setLastName(e.target.value)}
-                  fullWidth
-                  placeholder={
-                    context.language === "en" ? "Last Name" : "اسم العائله"
                   }
                 />
                 <TextField
@@ -157,20 +129,9 @@ const AddClient = () => {
                     context.language === "en" ? "Phone" : "رقم الهاتف"
                   }
                 />
-                {/* <TextField
-                  dir={context.language === "en" ? "ltr" : "rtl"}
-                  name="country"
-                  value={values.country}
-                  onChange={handleChange}
-                  onChangeCapture={(e) => setCountry(e.target.value)}
-                  fullWidth
-                  placeholder={
-                    context.language === "en" ? "Country" : "المدينه"
-                  }
-                /> */}
                 <Select
                   MenuProps={MenuProps}
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(e) => setSelectedGovernment(e.target.value)}
                   dir={context.language === "en" ? "ltr" : "rtl"}
                   sx={
                     context.language === "ar" && {
@@ -181,7 +142,41 @@ const AddClient = () => {
                     }
                   }
                   fullWidth
-                  value={country}
+                  value={selectedGovernment}
+                  defaultValue={"none"}
+                >
+                  <MenuItem
+                    disabled
+                    value="none"
+                    dir={context.language === "en" ? "ltr" : "rtl"}
+                  >
+                    {context.language === "en"
+                      ? "Select a governement"
+                      : "اختر محافظه"}
+                  </MenuItem>
+                  {egyptGovernorates.map((governement) => (
+                    <MenuItem
+                      value={governement.governorate}
+                      key={governement.governorate}
+                    >
+                      {governement.governorate}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  MenuProps={MenuProps}
+                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  dir={context.language === "en" ? "ltr" : "rtl"}
+                  sx={
+                    context.language === "ar" && {
+                      "& .MuiSvgIcon-root": {
+                        left: "7px",
+                        right: "auto",
+                      },
+                    }
+                  }
+                  fullWidth
+                  value={selectedCountry}
                   defaultValue={"none"}
                 >
                   <MenuItem
@@ -193,18 +188,36 @@ const AddClient = () => {
                       ? "Select a country"
                       : "اختر مدينه"}
                   </MenuItem>
-                  {countries.map((country) => 
-                  <MenuItem dir={context.language==="en" ? "ltr" : "rtl"} value={country.shortcut}>
-                  {context.language === "en" ? country.name : country.arabicName}
-                  </MenuItem>
-                  )}
+                  {egyptGovernorates
+                    .filter(
+                      (government) =>
+                        government.governorate === selectedGovernment
+                    )
+                    .map((gov) =>
+                      gov.cities.map((city) => (
+                        <MenuItem
+                          dir={context.language === "en" ? "ltr" : "rtl"}
+                          value={city}
+                          key={city}
+                        >
+                          {city}
+                        </MenuItem>
+                      ))
+                    )}
+
+                  {/* {countries.map((country) => (
+                    <MenuItem
+                      dir={context.language === "en" ? "ltr" : "rtl"}
+                      value={country.shortcut}
+                    >
+                      {context.language === "en"
+                        ? country.name
+                        : country.arabicName}
+                    </MenuItem>
+                  ))} */}
                 </Select>
                 <Button
-                  disabled={
-                    firstName && lastName && middleName && country && phone
-                      ? false
-                      : true
-                  }
+                  disabled={fullName && selectedCountry !=="none" && selectedGovernment !=="none" && phone ? false : true}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{
                     opacity: 0,

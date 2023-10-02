@@ -31,6 +31,7 @@ import DeleteServicesReducer from "./Services/GetServices";
 //Orders
 import GetAllOrdersReducer from "./Orders/GetOrders";
 import DeleteOrderReducer from "./Orders/DeleteOrders";
+import AddOrderReducer from "./Orders/AddOrders";
 //Inventory
 import GetInventoryReducer from "./Inventory/GetInventory";
 import DeleteItemReducer from "./Inventory/DeleteItem";
@@ -78,6 +79,7 @@ export default configureStore({
     //Orders
     GetAllOrders: GetAllOrdersReducer,
     DeleteOrder: DeleteOrderReducer,
+    AddOrder: AddOrderReducer,
     //Inventory
     GetInventory: GetInventoryReducer,
     DeleteItem: DeleteItemReducer,

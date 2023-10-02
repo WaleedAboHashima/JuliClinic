@@ -1,4 +1,5 @@
-export const baseURL = "https://clinic-icib.onrender.com";
+// export const baseURL = "https://clinic-icib.onrender.com";
+export const baseURL = "http://localhost:8080";
 
 export const countries = [
   { name: "Afghanistan", arabicName: "أفغانستان", shortcut: "AF" },
@@ -253,4 +254,164 @@ export const currencies = [
   { name: "Australian Dollar", code: "AUD" },
   { name: "Chinese Yuan Renminbi", code: "CNY" },
   { name: "Egyptian Pounds", code: "EGP" },
+];
+
+export const egyptGovernorates = [
+  {
+    governorate: "Alexandria",
+    governoratear: "الإسكندرية",
+    cities: ["Alexandria City", "Borg El Arab", "Abu Qir", "Rosetta"],
+    citiesar: ["مدينة الإسكندرية", "برج العرب", "أبو قير", "روزيتا"],
+  },
+  {
+    governorate: "Aswan",
+    governoratear: "أسوان",
+    cities: ["Aswan City", "Kom Ombo", "Edfu"],
+    citiesar: ["مدينة أسوان", "كوم أمبو", "إدفو"],
+  },
+  {
+    governorate: "Asyut",
+    governoratear: "أسيوط",
+    cities: ["Asyut City", "Dairut", "Sohag"],
+    citiesar: ["مدينة أسيوط", "ديروط", "سوهاج"],
+  },
+  {
+    governorate: "Beheira",
+    governoratear: "البحيرة",
+    cities: ["Damanhur", "Rashid", "Kafr El Dawar"],
+    citiesar: ["دمنهور", "رشيد", "كفر الدوار"],
+  },
+  {
+    governorate: "Beni Suef",
+    governoratear: "بني سويف",
+    cities: ["Beni Suef City", "Minya Al Qamh", "Biba"],
+    citiesar: ["مدينة بني سويف", "منية القمح", "بيبا"],
+  },
+  {
+    governorate: "Cairo",
+    governoratear: "القاهرة",
+    cities: ["Cairo City", "Giza", "6th of October City", "Heliopolis"],
+    citiesar: ["مدينة القاهرة", "الجيزة", "مدينة 6 أكتوبر", "مصر الجديدة"],
+  },
+  {
+    governorate: "Dakahlia",
+    governoratear: "الدقهلية",
+    cities: ["Mansoura", "Matareya", "Mit Ghamr"],
+    citiesar: ["المنصورة", "المطرية", "ميت غمر"],
+  },
+  {
+    governorate: "Damietta",
+    governoratear: "دمياط",
+    cities: ["Damietta City", "New Damietta", "Kafr Saad"],
+    citiesar: ["مدينة دمياط", "دمياط الجديدة", "كفر سعد"],
+  },
+  {
+    governorate: "Fayoum",
+    governoratear: "الفيوم",
+    cities: ["Fayoum City", "Tamiya", "Ibsheway"],
+    citiesar: ["مدينة الفيوم", "طميا", "إبشواي"],
+  },
+  {
+    governorate: "Gharbia",
+    governoratear: "الغربية",
+    cities: ["Tanta", "Kafr El Zayat", "Mahalla El Kubra", "Zefta"],
+    citiesar: ["طنطا", "كفر الزيات", "المحلة الكبرى", "زفتى"],
+  },
+  {
+    governorate: "Giza",
+    governoratear: "الجيزة",
+    cities: ["Giza City", "6th of October City", "Sheikh Zayed City"],
+    citiesar: ["مدينة الجيزة", "مدينة 6 أكتوبر", "مدينة الشيخ زايد"],
+  },
+  {
+    governorate: "Ismailia",
+    governoratear: "الإسماعيلية",
+    cities: ["Ismailia City", "Fayed", "Qantara"],
+    citiesar: ["مدينة الإسماعيلية", "الفيض", "القنطرة"],
+  },
+  {
+    governorate: "Kafr El Sheikh",
+    governoratear: "كفر الشيخ",
+    cities: ["Kafr El Sheikh City", "Desouk", "Ras El Bar"],
+    citiesar: ["مدينة كفر الشيخ", "دسوق", "رأس البر"],
+  },
+  {
+    governorate: "Luxor",
+    governoratear: "الأقصر",
+    cities: ["Luxor City", "Karnak", "Armant"],
+    citiesar: ["مدينة الأقصر", "كرنك", "أرمنت"],
+  },
+  {
+    governorate: "Matrouh",
+    governoratear: "مطروح",
+    cities: ["Marsa Matrouh", "El Alamein", "Siwa"],
+    citiesar: ["مرسى مطروح", "العلمين", "سيوة"],
+  },
+  {
+    governorate: "Minya",
+    governoratear: "المنيا",
+    cities: ["Minya City", "Beni Mazar", "Maghagha"],
+    citiesar: ["مدينة المنيا", "بني مزار", "مغاغة"],
+  },
+  {
+    governorate: "Monufia",
+    governoratear: "المنوفية",
+    cities: ["Shebin El Koum", "Sadat City", "Ashmoun"],
+    citiesar: ["شبين الكوم", "مدينة سادات", "أشمون"],
+  },
+  {
+    governorate: "New Valley",
+    governoratear: "الوادي الجديد",
+    cities: ["Kharga", "Dakhla", "Farafra"],
+    citiesar: ["الخارجة", "الداخلة", "الفرافرة"],
+  },
+  {
+    governorate: "North Sinai",
+    governoratear: "شمال سيناء",
+    cities: ["Arish", "Rafah", "Bir al-Abed"],
+    citiesar: ["العريش", "رفح", "بئر العبد"],
+  },
+  {
+    governorate: "Port Said",
+    governoratear: "بورسعيد",
+    cities: ["Port Said City", "Port Fuad"],
+    citiesar: ["مدينة بورسعيد", "بورفؤاد"],
+  },
+  {
+    governorate: "Qalyubia",
+    governoratear: "القليوبية",
+    cities: ["Banha", "Qalyub", "Shibin El Qanater"],
+    citiesar: ["بنها", "قليوب", "شبين القناطر"],
+  },
+  {
+    governorate: "Qena",
+    governoratear: "قنا",
+    cities: ["Qena City", "Luxor", "Dendera"],
+    citiesar: ["مدينة قنا", "الأقصر", "دندرة"],
+  },
+  {
+    governorate: "Red Sea",
+    governoratear: "البحر الأحمر",
+    cities: ["Hurghada", "Sharm El Sheikh", "Marsa Alam"],
+    citiesar: ["الغردقة", "شرم الشيخ", "مرسى علم"],
+  },
+  {
+    governorate: "Sharqia",
+    governoratear: "الشرقية",
+    cities: ["Zagazig", "Mansoura", "Ismailia"],
+    citiesar: ["الزقازيق", "المنصورة", "الإسماعيلية"],
+  },
+  {
+    governorate: "Sohag",
+    governoratear: "سوهاج",
+    cities: ["Sohag City", "Akhmim", "Girga"],
+    citiesar: ["مدينة سوهاج", "أخميم", "جرجا"],
+  },
+  {
+    governorate: "South Sinai",
+    governoratear: "جنوب سيناء",
+    cities: ["Sharm El Sheikh", "Dahab", "Saint Catherine"],
+    citiesar: ["شرم الشيخ", "دهب", "سانت كاترين"],
+  },
+  // Add Arabic names for other governorates and cities as needed
 ];

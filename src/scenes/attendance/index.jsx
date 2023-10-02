@@ -53,7 +53,7 @@ const Attendance = () => {
   const [date, setDate] = useState(dayjs(new Date()));
   const [type, setType] = useState("daily");
   const state = useSelector((state) => state.GetAttendance);
-  
+
   const columns = [
     {
       field: "id",
@@ -63,14 +63,14 @@ const Attendance = () => {
       field: "name",
       headerName: context.language === "en" ? "Name" : "لاسم",
       flex: 0.5,
-      valueGetter: (value) => value.row.staff.name,
+      valueGetter: (value) => value.row.user.name,
     },
     {
       field: "type",
       headerName: context.language === "en" ? "Type" : "النوع",
       flex: 1,
       renderCell: (value) => {
-        const type = value.row.staff.type;
+        const type = value.row.user.type;
         return (
           <Box
             width="60%"
@@ -133,21 +133,23 @@ const Attendance = () => {
         context.language === "en" ? "Salary / Percentage" : "النسبه / المرتب",
       flex: 1,
       valueGetter: ({ row }) => {
-        if (row.staff.salary) {
-          return row.staff.salary;
-        } else if (row.staff.percentage) {
-          return row.staff.percentage * 100 + "%";
+        if (row.user.salary) {
+          return row.user.salary;
+        } else if (row.user.percentage) {
+          return row.user.percentage * 100 + "%";
         } else {
           return "____________";
         }
       },
     },
+    type === "daily" &&
     {
-      field: "counter",
-      headerName: context.language === "en" ? "Attendance" : "الحضور",
+      field: "Date",
+      headerName: context.language === "en" ? "Date" : "التاريخ",
       flex: 0.5,
+      valueGetter: ({ row }) => row.Date.substring(0,10),
     },
-  ];
+  ].filter(Boolean);
   const day = date.$D;
   const year = date.$y;
   const month = date.$M + 1;
@@ -175,7 +177,7 @@ const Attendance = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
-        flexDirection={{xs: 'column', md: 'row'}}
+        flexDirection={{ xs: "column", md: "row" }}
         alignItems={"center"}
       >
         <Header
@@ -266,7 +268,6 @@ const Attendance = () => {
           <DataGrid
             autoPageSize
             disableSelectionOnClick
-            checkboxSelection
             loading={false}
             localeText={context.language === "en" ? null : arabicLocaleText}
             components={{ Toolbar: GridToolbar }}

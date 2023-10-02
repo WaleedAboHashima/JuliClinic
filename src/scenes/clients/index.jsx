@@ -24,34 +24,23 @@ import {
 import Header from "components/Header";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { GetStaffHandler } from "apis/data/Staff/GetStaff";
 import { LanguageContext } from "language";
 import {
-  AdminPanelSettingsOutlined,
-  CurrencyPound,
-  PersonOutlineOutlined,
-  LocalHospitalOutlined,
-  PhoneEnabledOutlined,
-  SecurityOutlined,
   Delete,
   AddOutlined,
-  Inventory2Outlined,
   CloseOutlined,
   MoreVertOutlined,
   Search,
   Edit,
 } from "@mui/icons-material";
-import { GetUsersHandler } from "apis/data/Users/GetUsers";
 import Cookies from "universal-cookie";
-import { DeleteUserHandler } from "apis/data/Users/DeleteUser";
 import { GetClientsHandler } from "apis/data/Clients/GetClients";
-import FlexBetween from "components/FlexBetween";
 import { Formik } from "formik";
 import { SearchClientHandler } from "apis/data/Clients/SearchClients";
 import { EditClientHandler } from "apis/data/Clients/EditClient";
 import { DeleteClientHandler } from "apis/data/Clients/DeleteClient";
 import { useNavigate } from "react-router-dom";
-import { countries } from "constant";
+import { countries, egyptGovernorates } from "constant";
 
 const Clients = () => {
   const theme = useTheme();
@@ -69,30 +58,22 @@ const Clients = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [code, setCode] = useState();
-  const [firstName, setFirstName] = useState();
-  const [middleName, setMiddleName] = useState();
-  const [lastName, setLastName] = useState();
+  const [fullName, setFullName] = useState();
   const [phone, setPhone] = useState();
-  const [country, setCountry] = useState();
-
+  const [selectedCountry, setSelectedCountry] = useState("none");
+  const [selectedGovernment, setSelectedGovernment] = useState("none");
+  console.log(userDetails);
   const [orders, setOrders] = useState([]);
   const columns = [
     {
       field: "id",
       headerName: "ID",
-      flex: 0.5
+      flex: 0.5,
     },
     {
-      field: "name",
+      field: "full_name",
       headerName: context.language === "en" ? "Name" : "الاسم",
       flex: 1,
-      valueGetter: ({ row }) =>
-        `${row.firstName} ${row.middleName} ${row.lastName}`,
-    },
-    {
-      field: "code",
-      headerName: context.language === "en" ? "Code" : "الكود",
-      flex: 0.5,
     },
     {
       field: "phone",
@@ -104,41 +85,22 @@ const Clients = () => {
       headerName: context.language === "en" ? "Country" : "المدينه",
       flex: 0.5,
     },
-    // {
-    //   field: "orders",
-    //   headerName: context.language === "en" ? "Orders" : "الطلبات",
-    //   flex: 0.5,
-    //   renderCell: ({ row: { orders } }) => (
-    //     <IconButton
-    //       disabled={orders.length ? false : true}
-    //       onClick={() => {
-    //         setIsOpen(true);
-    //         setOrders(orders);
-    //       }}
-    //     >
-    //       <Tooltip
-    //         title={context.language === "en" ? "View Orders" : "عرض الطلبات"}
-    //       >
-    //         <Inventory2Outlined />
-    //       </Tooltip>
-    //     </IconButton>
-    //   ),
-    // },
+    {
+      field: "code",
+      headerName: context.language === "en" ? "Code" : "الكود",
+      flex: 0.5,
+    },
     {
       field: "actions",
       headerName: "Actions",
       flex: 0.5,
-      renderCell: ({
-        row: { firstName, middleName, lastName, phone, country, _id },
-      }) => {
+      renderCell: ({ row: { full_name, phone, country, _id } }) => {
         return (
           <>
             <IconButton
               onClick={() => {
                 setUserDetails({
-                  firstName,
-                  middleName,
-                  lastName,
+                  full_name,
                   phone,
                   country,
                   _id,
@@ -156,8 +118,7 @@ const Clients = () => {
             </IconButton>
             <IconButton
               onClick={() => {
-                const username = firstName + middleName + lastName;
-                setUserDetails({ _id, username });
+                setUserDetails({ _id, fullName });
                 setFormOpen(true);
               }}
             >
@@ -168,13 +129,6 @@ const Clients = () => {
       },
     },
   ];
-
-  const breakpoints = {
-    xs: 0, // Extra small screens (phones)
-    sm: 600, // Small screens (tablets)
-    md: 960, // Medium screens (laptops)
-    lg: 1280, // Large screens (desktops)
-  };
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -191,11 +145,10 @@ const Clients = () => {
   const handleEdit = () => {
     dispatch(
       EditClientHandler({
-        firstName,
-        middleName,
-        lastName,
+        fullName,
         phone,
-        country,
+        country: selectedCountry,
+        governorate: selectedGovernment,
         _id: userDetails._id,
       })
     ).then((res) => {
@@ -277,9 +230,8 @@ const Clients = () => {
                   <InputBase
                     name="code"
                     required
-                    value={values.code}
-                    onChange={handleChange}
-                    onChangeCapture={(e) => setCode(e.target.value)}
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
                     sx={{
                       backgroundColor: "transparent",
                       borderRadius: 1,
@@ -319,7 +271,6 @@ const Clients = () => {
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          checkboxSelection
           localeText={context.language === "en" ? null : arabicLocaleText}
           loading={loading}
           components={{ Toolbar: GridToolbar }}
@@ -478,8 +429,7 @@ const Clients = () => {
         <DialogTitle id="alert-dialog-title">
           {isArabic ? "تعديل" : "Edit"}{" "}
           <span style={{ color: theme.palette.primary[400] }}>
-            {`${userDetails.firstName} ${userDetails.middleName} ${userDetails.lastName}`}
-            ?
+            {`${userDetails.full_name}`}?
           </span>
         </DialogTitle>
         <DialogContent>
@@ -490,34 +440,24 @@ const Clients = () => {
             flexDirection={"column"}
           >
             <TextField
+              dir={context.language === "en" ? "ltr" : "rtl"}
+              name="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               fullWidth
-              placeholder={
-                context.language === "en" ? "First Name" : "اسم الاول"
-              }
-              onChange={(e) => setFirstName(e.target.value)}
+              placeholder={context.language === "en" ? "First Name" : "الاسم"}
             />
             <TextField
-              fullWidth
-              placeholder={
-                context.language === "en" ? "Middle Name" : "الاسم الاوسط"
-              }
-              onChange={(e) => setMiddleName(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              placeholder={
-                context.language === "en" ? "Last Name" : "اسم العائله"
-              }
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              placeholder={context.language === "en" ? "Phone" : "الهاتف"}
+              dir={context.language === "en" ? "ltr" : "rtl"}
+              name="phone"
+              value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              fullWidth
+              placeholder={context.language === "en" ? "Phone" : "رقم الهاتف"}
             />
             <Select
               MenuProps={MenuProps}
-              onChange={(e) => setCountry(e.target.value)}
+              onChange={(e) => setSelectedGovernment(e.target.value)}
               dir={context.language === "en" ? "ltr" : "rtl"}
               sx={
                 context.language === "ar" && {
@@ -528,7 +468,44 @@ const Clients = () => {
                 }
               }
               fullWidth
-              value={country}
+              value={selectedGovernment}
+              defaultValue={"none"}
+            >
+              <MenuItem
+                disabled
+                value="none"
+                dir={context.language === "en" ? "ltr" : "rtl"}
+              >
+                {context.language === "en"
+                  ? "Select a governement"
+                  : "اختر محافظه"}
+              </MenuItem>
+              {egyptGovernorates.map((governement) => (
+                <MenuItem
+                dir={isArabic && 'rtl'}
+                  value={governement.governorate}
+                  key={governement.governorate}
+                >
+                  {isArabic
+                    ? governement.governoratear
+                    : governement.governorate}
+                </MenuItem>
+              ))}
+            </Select>
+            <Select
+              MenuProps={MenuProps}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              dir={context.language === "en" ? "ltr" : "rtl"}
+              sx={
+                context.language === "ar" && {
+                  "& .MuiSvgIcon-root": {
+                    left: "7px",
+                    right: "auto",
+                  },
+                }
+              }
+              fullWidth
+              value={selectedCountry}
               defaultValue={"none"}
             >
               <MenuItem
@@ -538,16 +515,31 @@ const Clients = () => {
               >
                 {context.language === "en" ? "Select a country" : "اختر مدينه"}
               </MenuItem>
-              {countries.map((country) => (
-                <MenuItem
-                  dir={context.language === "en" ? "ltr" : "rtl"}
-                  value={country.shortcut}
-                >
-                  {context.language === "en"
-                    ? country.name
-                    : country.arabicName}
-                </MenuItem>
-              ))}
+              {egyptGovernorates
+                .filter(
+                  (government) => government.governorate === selectedGovernment
+                )
+                .map((gov) =>
+                  !isArabic
+                    ? gov.cities.map((city) => (
+                        <MenuItem
+                          dir={context.language === "en" ? "ltr" : "rtl"}
+                          value={city}
+                          key={city}
+                        >
+                          {city}
+                        </MenuItem>
+                      ))
+                    : gov.citiesar.map((city) => (
+                        <MenuItem
+                          dir={context.language === "en" ? "ltr" : "rtl"}
+                          value={city}
+                          key={city}
+                        >
+                          {city}
+                        </MenuItem>
+                      ))
+                )}
             </Select>
           </Box>
         </DialogContent>

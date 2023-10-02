@@ -43,29 +43,31 @@ const Orders = () => {
     {
       field: "name",
       headerName: context.language === "en" ? "Name" : "لاسم",
-      flex: 0.8,
-      valueGetter: (value) =>
-        value.row.client.firstName +
-        " " +
-        value.row.client.middleName +
-        " " +
-        value.row.client.lastName,
-    },
-    {
-      field: "code",
-      headerName: context.language === "en" ? "Code" : "الكود",
-      flex: 0.3,
-      valueGetter: (value) => value.row.client.code,
-    },
-    {
-      field: "currency",
-      headerName: context.language === "en" ? "Currency" : "العمله",
       flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter: (value) =>
+        value.row.client.full_name
+        
+    },
+    {
+      field: "date",
+      headerName: context.language === "en" ? "Date" : "التاريخ",
+      flex: 0.5,
+      valueGetter: ({row}) => row.date.substring(0,10),
+      cellClassName: "custom-cell-class"
+    },
+    {
+      field: "time",
+      headerName: context.language === "en" ? "Time" : "الوقت",
+      flex: 0.5,
+      valueGetter: ({row}) => row.date.substring(11,19),
+      cellClassName: "custom-cell-class"
     },
     {
       field: "service_name",
       headerName: context.language === "en" ? "Service" : "الخدمه",
       flex: 0.5,
+      cellClassName: "custom-cell-class",
       valueGetter: (value) => value.row.service.name,
     },
     {
@@ -73,11 +75,19 @@ const Orders = () => {
       headerName: context.language === "en" ? "Amount Paid" : "المدفوع",
       flex: 0.5,
       valueGetter: (value) => value.row.amount_paid,
+      cellClassName: "custom-cell-class"
+    },
+    {
+      field: "currency",
+      headerName: context.language === "en" ? "Currency" : "العمله",
+      cellClassName: "custom-cell-class",
+      flex: 0.5,
     },
     {
       field: "done",
       headerName: context.language === "en" ? "Finished" : "انتهي",
       flex: 0.5,
+      cellClassName: "custom-cell-class",
       valueGetter: (value) =>
         value.row.done
           ? context.language === "en"
@@ -86,16 +96,6 @@ const Orders = () => {
           : context.language === "en"
           ? "Not Finished"
           : "لم تنتهي",
-    },
-    {
-      field: "date",
-      headerName: context.language === "en" ? "Date" : "التاريخ",
-      flex: 0.5,
-    },
-    {
-      field: "time",
-      headerName: context.language === "en" ? "Time" : "الوقت",
-      flex: 0.5,
     },
     {
       field: "actions",
@@ -170,14 +170,16 @@ const Orders = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
+        flexDirection={{xs: 'column' , md: 'row'}}
         alignItems={"center"}
+        gap={{xs: 2, md: 0}}
       >
         <Header
-          title={context.language === "en" ? "Orders" : "الحولات"}
+          title={context.language === "en" ? "Appointments" : "المواعيد"}
           subtitle={
             context.language === "en"
-              ? "Entire list of Orders"
-              : "قائمه الحولات"
+              ? "Entire list of Appointments"
+              : "قائمه المواعيد"
           }
         />
         <Box display={"flex"} gap={2}>
@@ -193,7 +195,7 @@ const Orders = () => {
             }}
             onClick={() => navigator("/addorder")}
           >
-            {context.language === "en" ? "ADD ORDER" : "اضافه طلب"}
+            {context.language === "en" ? "ADD APPOINTMENT" : "اضافه موعد"}
             <AddOutlined sx={{ mr: "10px" }} />
           </Button>
         </Box>
@@ -205,7 +207,7 @@ const Orders = () => {
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          checkboxSelection
+          
           loading={loading}
           localeText={context.language === "en" ? null : arabicLocaleText}
           components={{ Toolbar: GridToolbar }}

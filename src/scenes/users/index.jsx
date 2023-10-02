@@ -245,7 +245,7 @@ const Users = () => {
           <DataGrid
             autoPageSize
             disableSelectionOnClick
-            checkboxSelection
+            
             localeText={context.language === "en" ? null : arabicLocaleText}
             loading={userState.loading}
             components={{ Toolbar: GridToolbar }}

@@ -48,3 +48,7 @@ body,
 .info-box {
   max-width: 200px; 
 }
+
+.custom-cell-class {
+  font-size: 14px; /* Adjust the font size as needed */
+}

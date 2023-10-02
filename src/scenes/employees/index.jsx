@@ -41,6 +41,7 @@ import {
   MoreVertOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  PlusOneOutlined,
 } from "@mui/icons-material";
 import { DeleteStaffHandler } from "apis/data/Staff/DeleteStaff";
 import Cookies from "universal-cookie";
@@ -159,9 +160,24 @@ const Staff = () => {
     {
       field: "attendanceCount",
       headerName: context.language === "en" ? "Attendance" : "الحضور",
-      flex: 0.5,
+      flex: 0.3,
+      // valueGetter: ({ row: { attendanceCount } }) => {
+      //   if (attendanceCount >= 0) return attendanceCount;
+      //   else return "____________";
+      // },
+      renderCell: ({ row: { _id, attendanceCount } }) => {
+        if (attendanceCount >= 0) {
+          return (
+            <Box display={'flex'} justifyContent={'center'} width={'100%'} alignItems={'center'}>
+              {attendanceCount}
+              <IconButton onClick={() => addAttendance(_id)} disabled={attendanceCount === 0 ? false : true}>
+                <AddOutlined />
+              </IconButton>
+            </Box>
+          );
+        } else return "____________";
+      },
     },
-
     {
       field: "OrderCount",
       headerName: context.language === "en" ? "Orders count" : "عدد الطلبات",
@@ -209,6 +225,20 @@ const Staff = () => {
     },
   ];
 
+  const addAttendance = async (_id) => {
+    dispatch(AddAttendanceHandler({_id})).then((res) => {
+      if (res.payload.status === 201) {
+        dispatch(GetStaffHandler()).then((res) => {
+          if (res.payload) {
+            if (res.payload.status === 200) {
+              setRows(res.payload.data.StaffList);
+            }
+          }
+        });
+      }
+    })
+  }
+
   const getStaffOrders = async (_id, type) => {
     dispatch(GetStaffOrderHandler({ _id, type })).then((res) => {
       if (res.payload.status === 200) {
@@ -250,8 +280,8 @@ const Staff = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
-        flexDirection={{ xs: "column", sm: "row" }} 
-        gap={{xs: 6}}
+        flexDirection={{ xs: "column", sm: "row" }}
+        gap={{ xs: 6 }}
         alignItems={"center"}
       >
         <Header
@@ -282,7 +312,7 @@ const Staff = () => {
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          checkboxSelection
+          
           loading={loading}
           localeText={context.language === "en" ? null : arabicLocaleText}
           components={{ Toolbar: GridToolbar }}
@@ -384,8 +414,7 @@ const Staff = () => {
                     p={3}
                   >
                     <Typography>
-                      Client Name :{" "}
-                      {`${order.client.firstName} ${order.client.middleName} ${order.client.lastName}`}
+                      Client Name : {`${order.client.full_name}`}
                     </Typography>
                     <Typography>Client Code : {order.client.code}</Typography>
                     <Typography>Doctors : {order.doctor.name}</Typography>

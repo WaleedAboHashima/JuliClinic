@@ -1,4 +1,14 @@
-import { Box, Button, CircularProgress, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  MenuItem,
+  Select,
+  Snackbar,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import Header from "components/Header";
 import { LanguageContext } from "language";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,7 +34,7 @@ const AddOrder = () => {
   const [doctors, setDoctors] = useState([]);
   const [assistances, setAssistances] = useState([]);
   const [services, setServices] = useState([]);
-  const state = useSelector(state => state.AddOrder)
+  const state = useSelector((state) => state.AddOrder);
   const [selectedServices, setSelectedServices] = useState(1);
   const [currency, setCurrency] = useState("EGP");
   const [selectedDoctor, setSelectedDoctor] = useState(1);
@@ -38,6 +48,8 @@ const AddOrder = () => {
   const [amountPaid, setAmoundPaid] = useState();
   const [selectedAssistances, setSelectedAssistances] = useState([""]);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [error, setError] = useState();
 
   const handleAddSubmit = () => {
     const additionalInfo = additionalFields.map((field) => {
@@ -55,7 +67,7 @@ const AddOrder = () => {
     const month = date.$M + 1;
     const hour = time.$H;
     const minute = time.$m;
-    const newTime = `${hour}:${minute}`
+    const newTime = `${hour}:${minute}`;
     const formatted = `${day}-${month}-${year}`;
     dispatch(
       AddOrdersHandler({
@@ -72,6 +84,18 @@ const AddOrder = () => {
     ).then((res) => {
       if (res.payload.status === 201) {
         window.location.pathname = "/orders";
+      } else if (res.payload.status === 409) {
+        setError(
+          isArabic
+            ? "يوجد طلب بهذا التوقيت"
+            : "There is an order with this date"
+        );
+        setSnackOpen(true);
+      }
+      else {
+        setError(res.payload.error.message);
+        setSnackOpen(true);
+
       }
     });
   };
@@ -90,6 +114,14 @@ const AddOrder = () => {
     const updatedFields = [...additionalFields];
     updatedFields.splice(index, 1);
     setAdditionalFields(updatedFields);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
   };
 
   useEffect(() => {
@@ -124,9 +156,13 @@ const AddOrder = () => {
         alignItems={"center"}
       >
         <Header
-          title={context.language === "en" ? "Add Appointments" : "اضافه مواعيد"}
+          title={
+            context.language === "en" ? "Add Appointments" : "اضافه مواعيد"
+          }
           subtitle={
-            context.language === "en" ? "Add Appointments below" : "اضافه مواعيد"
+            context.language === "en"
+              ? "Add Appointments below"
+              : "اضافه مواعيد"
           }
         />
       </Box>
@@ -268,7 +304,7 @@ const AddOrder = () => {
                 value={time}
                 onChange={(value) => {
                   setTime(value);
-                  console.log(value)
+                  console.log(value);
                 }}
               />
             </LocalizationProvider>
@@ -326,11 +362,22 @@ const AddOrder = () => {
               }
               variant="contained"
             >
-              {state.loading ? <CircularProgress size={20} sx={{color: 'white'}} /> : context.language === "en" ? "Submit" : "أستمرار"}
+              {state.loading ? (
+                <CircularProgress size={20} sx={{ color: "white" }} />
+              ) : context.language === "en" ? (
+                "Submit"
+              ) : (
+                "أستمرار"
+              )}
             </Button>
           </form>
         </Box>
       </Box>
+      <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'center'}} open={snackOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          {error}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

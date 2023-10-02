@@ -22,7 +22,7 @@ const AddClient = () => {
   const [fullName, setFullName] = useState();
   const [phone, setPhone] = useState();
   const [selectedCountry, setSelectedCountry] = useState("none");
-  const [selectedGovernment, setSelectedGovernment] = useState("none");
+  // const [selectedGovernment, setSelectedGovernment] = useState("none");
   const state = useSelector((state) => state.AddClient);
   const [error, setError] = useState("");
 
@@ -41,7 +41,11 @@ const AddClient = () => {
 
   const handleAddUser = () => {
     setError("");
-    dispatch(AddClientHandler({ fullName, phone, country: selectedCountry, governorate: selectedGovernment })).then((res) => {
+    dispatch(AddClientHandler({ fullName, phone, country: selectedCountry, 
+      
+      // governorate: selectedGovernment
+    
+    })).then((res) => {
       if (res.payload.status === 201) {
         window.location.pathname = "/clients";
       } else {
@@ -129,7 +133,7 @@ const AddClient = () => {
                     context.language === "en" ? "Phone" : "رقم الهاتف"
                   }
                 />
-                <Select
+                {/* <Select
                   MenuProps={MenuProps}
                   onChange={(e) => setSelectedGovernment(e.target.value)}
                   dir={context.language === "en" ? "ltr" : "rtl"}
@@ -162,7 +166,7 @@ const AddClient = () => {
                       {governement.governorate}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
                 <Select
                   MenuProps={MenuProps}
                   onChange={(e) => setSelectedCountry(e.target.value)}
@@ -188,7 +192,7 @@ const AddClient = () => {
                       ? "Select a country"
                       : "اختر مدينه"}
                   </MenuItem>
-                  {egyptGovernorates
+                  {/* {egyptGovernorates
                     .filter(
                       (government) =>
                         government.governorate === selectedGovernment
@@ -203,9 +207,9 @@ const AddClient = () => {
                           {city}
                         </MenuItem>
                       ))
-                    )}
+                    )} */}
 
-                  {/* {countries.map((country) => (
+                  {countries.map((country) => (
                     <MenuItem
                       dir={context.language === "en" ? "ltr" : "rtl"}
                       value={country.shortcut}
@@ -214,10 +218,10 @@ const AddClient = () => {
                         ? country.name
                         : country.arabicName}
                     </MenuItem>
-                  ))} */}
+                  ))}
                 </Select>
                 <Button
-                  disabled={fullName && selectedCountry !=="none" && selectedGovernment !=="none" && phone ? false : true}
+                  disabled={fullName && selectedCountry !=="none" && phone ? false : true}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{
                     opacity: 0,

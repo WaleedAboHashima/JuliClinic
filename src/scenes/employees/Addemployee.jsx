@@ -28,11 +28,12 @@ const InputText = ({
   handleChange,
   setChange,
   label,
-  way,
 }) => {
   return (
     <TextField
-    type={label === "Password" || label === "كلمه المرور" ? "password" : "text"}
+      type={
+        label === "Password" || label === "كلمه المرور" ? "password" : "text"
+      }
       fullWidth
       value={
         label === "Name" || label === "الأسم"
@@ -43,6 +44,8 @@ const InputText = ({
           ? values.password
           : label === "Email" || label === "البريد الإلكتروني"
           ? values.email
+          : label === "Commission % " || label === "العموله %"
+          ? values.commission
           : ""
       }
       name={name}
@@ -51,13 +54,7 @@ const InputText = ({
       onChangeCapture={(e) => setChange(e.target.value)}
       InputProps={{
         startAdornment: (
-          <InputAdornment position="start">
-            {label === "Salary"
-              ? way === "fixed"
-                ? label
-                : "Percentage %"
-              : label}
-          </InputAdornment>
+          <InputAdornment position="start">{label}</InputAdornment>
         ),
       }}
     />
@@ -71,7 +68,7 @@ const AddEmployee = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const [salary, setSalary] = useState(undefined);
+  const [salary, setSalary] = useState();
   const [percentage, setPercentage] = useState();
   const [way, setWay] = useState("fixed");
   const [startDate, setStartDate] = useState(new Date());
@@ -92,6 +89,11 @@ const AddEmployee = () => {
             name: "salary",
             text: "Salary",
             ar: "المرتب",
+          },
+          {
+            name: "commission",
+            text: "Commission % ",
+            ar: "العموله %",
           },
         ]
       : type === "call_center" || type === "recipetion"
@@ -131,7 +133,6 @@ const AddEmployee = () => {
         name,
         salary: salary && parseInt(salary),
         percentage: percentage && parseInt(percentage),
-        way,
         type,
         email: email && email,
         pwd: pwd && pwd,
@@ -164,13 +165,13 @@ const AddEmployee = () => {
               sx={
                 context.language === "ar"
                   ? {
-                      width: {xs: "100%" , md: "30%"},
+                      width: { xs: "100%", md: "30%" },
                       "& .MuiSvgIcon-root": {
                         left: "7px",
                         right: "auto",
                       },
                     }
-                  : { width: {xs: "100%" , md: "30%"}}
+                  : { width: { xs: "100%", md: "30%" } }
               }
               defaultValue={0}
               onChange={(e) => {
@@ -255,43 +256,6 @@ const AddEmployee = () => {
                       width: "70%",
                     }}
                   >
-                    <Select
-                      name="way"
-                      value={way}
-                      onChange={(e) => setWay(e.target.value)}
-                      fullWidth
-                      dir={context.language === "en" ? "ltr" : "rtl"}
-                      sx={
-                        context.language === "ar" && {
-                          "& .MuiSvgIcon-root": {
-                            left: "7px",
-                            right: "auto",
-                          },
-                        }
-                      }
-                    >
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={way}
-                        disabled
-                      >
-                        {context.language === "en"
-                          ? "Select Way"
-                          : "اختر طريقه"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"fixed"}
-                      >
-                        {context.language === "en" ? "Fixed" : "مرتب ثابت"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"com"}
-                      >
-                        {context.language === "en" ? "Commision" : "عموله"}
-                      </MenuItem>
-                    </Select>
                     {inputsData.map((input) => (
                       <InputText
                         key={context.language === "en" ? input.name : input.ar}
@@ -299,15 +263,12 @@ const AddEmployee = () => {
                         name={context.language === "en" ? input.name : input.ar}
                         handleBlur={handleBlur}
                         handleChange={handleChange}
-                        way={way}
                         setChange={
                           input.name === "name"
                             ? setName
                             : input.name === "salary"
-                            ? way === "fixed"
-                              ? setSalary
-                              : setPercentage
-                            : setWay
+                            ? setSalary
+                            : setPercentage
                         }
                         label={
                           context.language === "en" ? input.text : input.ar
@@ -365,43 +326,6 @@ const AddEmployee = () => {
                       width: "70%",
                     }}
                   >
-                    <Select
-                      dir={context.language === "en" ? "ltr" : "rtl"}
-                      sx={
-                        context.language === "ar" && {
-                          "& .MuiSvgIcon-root": {
-                            left: "7px",
-                            right: "auto",
-                          },
-                        }
-                      }
-                      name="way"
-                      value={way}
-                      onChange={(e) => setWay(e.target.value)}
-                      fullWidth
-                    >
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={way}
-                        disabled
-                      >
-                        {context.language === "en"
-                          ? "Select Way"
-                          : "اختر طريقه"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"fixed"}
-                      >
-                        {context.language === "en" ? "Fixed" : "ثابت"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"com"}
-                      >
-                        {context.language === "en" ? "Commision" : "عموله"}
-                      </MenuItem>
-                    </Select>
                     {inputsData.map((input) => (
                       <InputText
                         key={input.name}
@@ -479,43 +403,6 @@ const AddEmployee = () => {
                       width: "70%",
                     }}
                   >
-                    <Select
-                      dir={context.language === "en" ? "ltr" : "rtl"}
-                      sx={
-                        context.language === "ar" && {
-                          "& .MuiSvgIcon-root": {
-                            left: "7px",
-                            right: "auto",
-                          },
-                        }
-                      }
-                      name="way"
-                      value={way}
-                      onChange={(e) => setWay(e.target.value)}
-                      fullWidth
-                    >
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={way}
-                        disabled
-                      >
-                        {context.language === "en"
-                          ? "Select Way"
-                          : "اختر طريقه"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"fixed"}
-                      >
-                        {context.language === "en" ? "Fixed" : "ثابت"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"com"}
-                      >
-                        {context.language === "en" ? "Commision" : "عموله"}
-                      </MenuItem>
-                    </Select>
                     {inputsData.map((input) => (
                       <InputText
                         key={input.name}
@@ -593,43 +480,6 @@ const AddEmployee = () => {
                       width: "70%",
                     }}
                   >
-                    <Select
-                      dir={context.language === "en" ? "ltr" : "rtl"}
-                      sx={
-                        context.language === "ar" && {
-                          "& .MuiSvgIcon-root": {
-                            left: "7px",
-                            right: "auto",
-                          },
-                        }
-                      }
-                      name="way"
-                      value={way}
-                      onChange={(e) => setWay(e.target.value)}
-                      fullWidth
-                    >
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={way}
-                        disabled
-                      >
-                        {context.language === "en"
-                          ? "Select Way"
-                          : "اختر طريقه"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"fixed"}
-                      >
-                        {context.language === "en" ? "Fixed" : "ثابت"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"com"}
-                      >
-                        {context.language === "en" ? "Commision" : "عموله"}
-                      </MenuItem>
-                    </Select>
                     {inputsData.map((input) => (
                       <InputText
                         key={input.name}
@@ -651,7 +501,9 @@ const AddEmployee = () => {
                             ? setEmail
                             : setWay
                         }
-                        label={context.language === "en" ? input.text : input.ar}
+                        label={
+                          context.language === "en" ? input.text : input.ar
+                        }
                       />
                     ))}
 
@@ -705,43 +557,6 @@ const AddEmployee = () => {
                       width: "70%",
                     }}
                   >
-                    <Select
-                      dir={context.language === "en" ? "ltr" : "rtl"}
-                      sx={
-                        context.language === "ar" && {
-                          "& .MuiSvgIcon-root": {
-                            left: "7px",
-                            right: "auto",
-                          },
-                        }
-                      }
-                      name="way"
-                      value={way}
-                      onChange={(e) => setWay(e.target.value)}
-                      fullWidth
-                    >
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={way}
-                        disabled
-                      >
-                        {context.language === "en"
-                          ? "Select Way"
-                          : "اختر طريقه"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"fixed"}
-                      >
-                        {context.language === "en" ? "Fixed" : "ثابت"}
-                      </MenuItem>
-                      <MenuItem
-                        dir={context.language === "en" ? "ltr" : "rtl"}
-                        value={"com"}
-                      >
-                        {context.language === "en" ? "Commision" : "عموله"}
-                      </MenuItem>
-                    </Select>
                     {inputsData.map((input) => (
                       <InputText
                         key={input.name}

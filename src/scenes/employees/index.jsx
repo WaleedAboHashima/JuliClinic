@@ -148,10 +148,12 @@ const Staff = () => {
         context.language === "en" ? "Salary / Percentage" : "النسبه / المرتب",
       flex: 1,
       valueGetter: ({ row }) => {
-        if (row.salary) {
-          return row.salary;
+        if (row.salary && row.percentage) {
+          return `${row.salary} / ${row.percentage}`;
         } else if (row.percentage) {
           return row.percentage * 100 + "%";
+        } else if (row.salary) {
+          return row.salary;
         } else {
           return "____________";
         }
@@ -168,9 +170,17 @@ const Staff = () => {
       renderCell: ({ row: { _id, attendanceCount } }) => {
         if (attendanceCount >= 0) {
           return (
-            <Box display={'flex'} justifyContent={'center'} width={'100%'} alignItems={'center'}>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              width={"100%"}
+              alignItems={"center"}
+            >
               {attendanceCount}
-              <IconButton onClick={() => addAttendance(_id)} disabled={attendanceCount === 0 ? false : true}>
+              <IconButton
+                onClick={() => addAttendance(_id)}
+                disabled={attendanceCount === 0 ? false : true}
+              >
                 <AddOutlined />
               </IconButton>
             </Box>
@@ -226,7 +236,7 @@ const Staff = () => {
   ];
 
   const addAttendance = async (_id) => {
-    dispatch(AddAttendanceHandler({_id})).then((res) => {
+    dispatch(AddAttendanceHandler({ _id })).then((res) => {
       if (res.payload.status === 201) {
         dispatch(GetStaffHandler()).then((res) => {
           if (res.payload) {
@@ -236,8 +246,8 @@ const Staff = () => {
           }
         });
       }
-    })
-  }
+    });
+  };
 
   const getStaffOrders = async (_id, type) => {
     dispatch(GetStaffOrderHandler({ _id, type })).then((res) => {
@@ -312,7 +322,6 @@ const Staff = () => {
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          
           loading={loading}
           localeText={context.language === "en" ? null : arabicLocaleText}
           components={{ Toolbar: GridToolbar }}

@@ -455,7 +455,7 @@ const Clients = () => {
               fullWidth
               placeholder={context.language === "en" ? "Phone" : "رقم الهاتف"}
             />
-            <Select
+            {/* <Select
               MenuProps={MenuProps}
               onChange={(e) => setSelectedGovernment(e.target.value)}
               dir={context.language === "en" ? "ltr" : "rtl"}
@@ -491,7 +491,7 @@ const Clients = () => {
                     : governement.governorate}
                 </MenuItem>
               ))}
-            </Select>
+            </Select> */}
             <Select
               MenuProps={MenuProps}
               onChange={(e) => setSelectedCountry(e.target.value)}
@@ -515,7 +515,7 @@ const Clients = () => {
               >
                 {context.language === "en" ? "Select a country" : "اختر مدينه"}
               </MenuItem>
-              {egyptGovernorates
+              {/* {egyptGovernorates
                 .filter(
                   (government) => government.governorate === selectedGovernment
                 )
@@ -539,7 +539,17 @@ const Clients = () => {
                           {city}
                         </MenuItem>
                       ))
-                )}
+                )} */}
+              {countries.map((country) => (
+                <MenuItem
+                  dir={context.language === "en" ? "ltr" : "rtl"}
+                  value={country.shortcut}
+                >
+                  {context.language === "en"
+                    ? country.name
+                    : country.arabicName}
+                </MenuItem>
+              ))}
             </Select>
           </Box>
         </DialogContent>

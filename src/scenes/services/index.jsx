@@ -29,8 +29,17 @@ import Cookies from "universal-cookie";
 import { AddOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { GetStaffHandler } from "apis/data/Staff/GetStaff";
+import { EditServiceHandler } from "apis/Services/EditServices";
 
-const Service = ({ _id, name, price, doctors, handleDelete, handleEdit }) => {
+const Service = ({
+  _id,
+  name,
+  price,
+  doctors,
+  handleDelete,
+  setEditOpen,
+  setServiceId,
+}) => {
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -132,7 +141,10 @@ const Service = ({ _id, name, price, doctors, handleDelete, handleEdit }) => {
             }}
           >
             <Button
-              onClick={() => handleEdit(_id)}
+              onClick={() => {
+                setServiceId(_id);
+                setEditOpen(true);
+              }}
               variant="contained"
               sx={{
                 backgroundColor: theme.palette.primary[300],
@@ -167,12 +179,12 @@ const Services = () => {
   const dispatch = useDispatch();
   const context = useContext(LanguageContext);
   const theme = useTheme();
-  const [serviceDetails, setServiceDetails] = useState();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [selectedDoctor, setSelectedDoctor] = useState([""]);
   const [editOpen, setEditOpen] = useState(false);
   const navigator = useNavigate();
+  const [serviceId, setServiceId] = useState();
   const [doctors, setDoctors] = useState([]);
   const cookies = new Cookies();
   const isArabic = context.language === "ar";
@@ -194,8 +206,37 @@ const Services = () => {
     setAdditionalFields(updatedFields);
   };
 
-  const handleEdit = (_id) => {
-    setEditOpen(true);
+  const handleEdit = () => {
+    const additionalInfo = additionalFields.map((field) => {
+      const keys = field.key.split(",");
+      const values = field.value.split(",");
+      const info = {};
+      keys.forEach((key, index) => {
+        info[key] = values[index];
+      });
+
+      return info;
+    });
+    dispatch(
+      EditServiceHandler({
+        id: serviceId,
+        name,
+        doctors: selectedDoctor,
+        price,
+        additionalInfo,
+      })
+    ).then((res) => {
+      if (res.payload.status === 201) {
+        setEditOpen(false);
+        dispatch(GetServicesHandler()).then((res) => {
+          if (res.payload) {
+            if (res.payload.status === 200) {
+              setData(res.payload.data.services);
+            }
+          }
+        });
+      }
+    });
   };
 
   const handleDelete = (_id) => {
@@ -234,6 +275,8 @@ const Services = () => {
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
+        flexDirection={{ xs: "column", sm: "row" }}
+        gap={{ xs: 5, sm: 0 }}
       >
         <Header
           title={context.language === "en" ? "SERVICES" : "خدمات"}
@@ -281,8 +324,9 @@ const Services = () => {
               name={name}
               price={price}
               doctors={doctors}
+              setEditOpen={setEditOpen}
               handleDelete={handleDelete}
-              handleEdit={handleEdit}
+              setServiceId={setServiceId}
             />
           ))}
         </Box>
@@ -314,7 +358,14 @@ const Services = () => {
               fullWidth
               defaultValue={[""]}
               value={selectedDoctor}
-              onChange={(e) => setSelectedDoctor(e.target.value)}
+              onChange={(e) => {
+                const selectedValues = e.target.value;
+                // Filter out the empty string from selected values
+                const updatedSelectedValues = selectedValues.filter(
+                  (value) => value !== ""
+                );
+                setSelectedDoctor(updatedSelectedValues);
+              }}
               multiple
             >
               <MenuItem

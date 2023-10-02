@@ -18,12 +18,13 @@ import {
   useMediaQuery,
   Skeleton,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import StatBox from "components/StatBox";
 import { LanguageContext } from "language";
 import BarChart from "components/BarChart";
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllDataHandler } from "apis/dashboard/DashboardData";
+import { GetOrdersHandler } from "apis/Orders/GetOrders";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -31,6 +32,7 @@ const Dashboard = () => {
   const context = useContext(LanguageContext);
   const [data, setData] = useState();
   const state = useSelector((state) => state.GetAllData);
+  const [orders, setOrders] = useState([]);
   const columns = [
     {
       field: "id",
@@ -69,12 +71,77 @@ const Dashboard = () => {
       valueGetter: (value) => value.row.counter,
     },
   ];
+  const ordersColumns = [
+    {
+      field: "id",
+      headerName: "ID",
+    },
+    {
+      field: "name",
+      headerName: context.language === "en" ? "Name" : "لاسم",
+      flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter: (value) => value.row.client.full_name,
+    },
+    {
+      field: "date",
+      headerName: context.language === "en" ? "Date" : "التاريخ",
+      flex: 0.5,
+      valueGetter: ({ row }) => row.date.substring(0, 10),
+      cellClassName: "custom-cell-class",
+    },
+    {
+      field: "time",
+      headerName: context.language === "en" ? "Time" : "الوقت",
+      flex: 0.5,
+      valueGetter: ({ row }) => row.date.substring(11, 19),
+      cellClassName: "custom-cell-class",
+    },
+    {
+      field: "service_name",
+      headerName: context.language === "en" ? "Service" : "الخدمه",
+      flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter: (value) => value.row.service.name,
+    },
+    {
+      field: "amount_paid",
+      headerName: context.language === "en" ? "Amount Paid" : "المدفوع",
+      flex: 0.5,
+      valueGetter: (value) => value.row.amount_paid,
+      cellClassName: "custom-cell-class",
+    },
+    {
+      field: "currency",
+      headerName: context.language === "en" ? "Currency" : "العمله",
+      cellClassName: "custom-cell-class",
+      flex: 0.5,
+    },
+    {
+      field: "done",
+      headerName: context.language === "en" ? "Finished" : "انتهي",
+      flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter: (value) =>
+        value.row.done
+          ? context.language === "en"
+            ? "Finished"
+            : "انتهي"
+          : context.language === "en"
+          ? "Not Finished"
+          : "لم تنتهي",
+    },
+  ];
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllDataHandler()).then((res) => {
       if (res.payload.status === 200) {
         setData(res.payload.data);
       }
+      dispatch(GetOrdersHandler()).then((res) => {
+        setOrders(res.payload.data.orders);
+      });
     });
   }, []);
 
@@ -89,21 +156,6 @@ const Dashboard = () => {
               : "اهلا وسهلا بك في لوحه التحكم"
           }
         />
-        {/* 
-        <Box>
-          <Button
-            sx={{
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.background.alt,
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-          >
-            <DownloadOutlined sx={{ mr: "10px" }} />
-            Download Reports
-          </Button>
-        </Box> */}
       </FlexBetween>
 
       <Box
@@ -178,7 +230,18 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-          <BarChart />
+          <DataGrid
+            autoPageSize
+            disableSelectionOnClick
+            loading={state.loading}
+            localeText={context.language === "en" ? null : arabicLocaleText}
+            components={{ Toolbar: GridToolbar }}
+            rows={orders.slice(0,5).map((user, index) => ({
+              id: index + 1,
+              ...user,
+            }))}
+            columns={ordersColumns}
+          />
         </Box>
         {state.loading ? (
           <Skeleton
@@ -273,7 +336,6 @@ const Dashboard = () => {
             localeText={context.language === "ar" && arabicLocaleText}
             loading={state.loading}
             autoPageSize
-            
             rows={
               (data &&
                 data.Services.map((service, index) => ({
@@ -334,7 +396,6 @@ const Dashboard = () => {
             autoPageSize
             localeText={context.language === "ar" && arabicLocaleText}
             loading={state.loading}
-            
             rows={
               (data &&
                 data.TopClients.map((client, index) => ({

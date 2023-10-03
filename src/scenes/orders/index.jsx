@@ -29,7 +29,7 @@ const Orders = () => {
   // values to be sent to the backend
   const context = useContext(LanguageContext);
   const cookies = new Cookies();
-  const isAdmin = cookies.get('_auth_role') === 'Admin';
+  const isAdmin = cookies.get("_auth_role") === "Admin";
   const state = useSelector((state) => state.DeleteOrder);
   const loading = useSelector((state) => state.GetAllOrders.loading);
   const dispatch = useDispatch();
@@ -45,23 +45,21 @@ const Orders = () => {
       headerName: context.language === "en" ? "Name" : "لاسم",
       flex: 0.5,
       cellClassName: "custom-cell-class",
-      valueGetter: (value) =>
-        value.row.client.full_name
-        
+      valueGetter: (value) => value.row.client.full_name,
     },
     {
       field: "date",
       headerName: context.language === "en" ? "Date" : "التاريخ",
       flex: 0.5,
-      valueGetter: ({row}) => row.date.substring(0,10),
-      cellClassName: "custom-cell-class"
+      valueGetter: ({ row }) => row.date.substring(0, 10),
+      cellClassName: "custom-cell-class",
     },
     {
       field: "time",
       headerName: context.language === "en" ? "Time" : "الوقت",
       flex: 0.5,
-      valueGetter: ({row}) => row.date.substring(11,19),
-      cellClassName: "custom-cell-class"
+      valueGetter: ({ row }) => row.date.substring(11, 19),
+      cellClassName: "custom-cell-class",
     },
     {
       field: "service_name",
@@ -71,25 +69,25 @@ const Orders = () => {
       valueGetter: (value) => value.row.service.name,
     },
     {
-      field: 'doctor',
+      field: "doctor",
       headerName: context.language === "en" ? "Doctor" : "الطبيب",
       flex: 0.5,
       cellClassName: "custom-cell-class",
-      valueGetter : (value) => value.row.doctor.name
+      valueGetter: (value) => value.row.doctor.name,
     },
     {
-      field: 'assistances',
+      field: "assistances",
       headerName: context.language === "en" ? "Assistances" : "المساعدين",
       flex: 0.5,
       cellClassName: "custom-cell-class",
-      valueGetter : (value) => value.row.assistances[0].name
+      valueGetter: (value) => value.row.assistances[0].name,
     },
     {
       field: "amount_paid",
       headerName: context.language === "en" ? "Amount Paid" : "المدفوع",
       flex: 0.5,
       valueGetter: (value) => value.row.amount_paid,
-      cellClassName: "custom-cell-class"
+      cellClassName: "custom-cell-class",
     },
     {
       field: "currency",
@@ -135,17 +133,19 @@ const Orders = () => {
             >
               <Visibility sx={{ color: "white" }} />
             </IconButton>
-            <IconButton
-              onClick={() => {
-                handleDelete(_id);
-              }}
-            >
-              <Delete color="error" />
-            </IconButton>
+            {isAdmin && (
+              <IconButton
+                onClick={() => {
+                  handleDelete(_id);
+                }}
+              >
+                <Delete color="error" />
+              </IconButton>
+            )}
           </>
         );
       },
-    }
+    },
   ];
 
   const handleDone = (id) => {
@@ -184,9 +184,9 @@ const Orders = () => {
       <Box
         display={"flex"}
         justifyContent={"space-between"}
-        flexDirection={{xs: 'column' , md: 'row'}}
+        flexDirection={{ xs: "column", md: "row" }}
         alignItems={"center"}
-        gap={{xs: 2, md: 0}}
+        gap={{ xs: 2, md: 0 }}
       >
         <Header
           title={context.language === "en" ? "Appointments" : "المواعيد"}
@@ -212,14 +212,10 @@ const Orders = () => {
           </Button>
         </Box>
       </Box>
-      <Box
-        mt="40px"
-        height="75vh"
-      >
+      <Box mt="40px" height="75vh">
         <DataGrid
           autoPageSize
           disableSelectionOnClick
-          
           loading={loading}
           localeText={context.language === "en" ? null : arabicLocaleText}
           components={{ Toolbar: GridToolbar }}
@@ -227,7 +223,7 @@ const Orders = () => {
             id: index + 1,
             ...user,
           }))}
-          columns={isAdmin ? columns : columns.filter(column => column.field !== 'actions')}
+          columns={columns}
         />
       </Box>
     </Box>

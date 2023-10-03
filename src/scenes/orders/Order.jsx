@@ -201,7 +201,7 @@ const Order = () => {
           <Select
             disabled={isEdit ? false : true}
             multiple
-            value={selectedAssistance}
+            value={isEdit ? selectedAssistance : assistances}
             onChange={(e) => setSelectedAssistance(e.target.value)}
           >
             {assistances &&

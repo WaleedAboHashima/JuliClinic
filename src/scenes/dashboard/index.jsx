@@ -25,6 +25,7 @@ import BarChart from "components/BarChart";
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllDataHandler } from "apis/dashboard/DashboardData";
 import { GetOrdersHandler } from "apis/Orders/GetOrders";
+import PieChart from "components/PieChart";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -230,18 +231,24 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-          <DataGrid
-            autoPageSize
-            disableSelectionOnClick
-            loading={state.loading}
-            localeText={context.language === "en" ? null : arabicLocaleText}
-            components={{ Toolbar: GridToolbar }}
-            rows={orders.slice(0,5).map((user, index) => ({
-              id: index + 1,
-              ...user,
-            }))}
-            columns={ordersColumns}
-          />
+          <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+            <Header
+              title={
+                context.language === "en" ? "Orders Table" : "جدول الطلبات"
+              }
+            />
+            <DataGrid
+              autoPageSize
+              disableSelectionOnClick
+              loading={state.loading}
+              localeText={context.language === "en" ? null : arabicLocaleText}
+              rows={orders.slice(0, 5).map((user, index) => ({
+                id: index + 1,
+                ...user,
+              }))}
+              columns={ordersColumns}
+            />
+          </Box>
         </Box>
         {state.loading ? (
           <Skeleton
@@ -305,7 +312,10 @@ const Dashboard = () => {
         {/* ROW 2 */}
         <Box
           gridColumn="span 6"
-          gridRow="span 3"
+          gridRow="span 2"
+          backgroundColor={theme.palette.background.alt}
+          p="1rem"
+          borderRadius="0.55rem"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
@@ -332,95 +342,132 @@ const Dashboard = () => {
             },
           }}
         >
-          <DataGrid
-            localeText={context.language === "ar" && arabicLocaleText}
-            loading={state.loading}
-            autoPageSize
-            rows={
-              (data &&
-                data.Services.map((service, index) => ({
-                  id: index + 1,
-                  ...service,
-                }))) ||
-              []
-            }
-            columns={columns.map((column, index) => ({
-              ...column,
-              renderCell: (params) => {
-                const position = params.row.id;
-                let textColor = "black";
+          <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+            <Header
+              title={
+                context.language === "en" ? "Top Services" : "اكثر الخدمات طلبا"
+              }
+            />
+            <DataGrid
+              localeText={context.language === "ar" && arabicLocaleText}
+              loading={state.loading}
+              autoPageSize
+              rows={
+                (data &&
+                  data.Services.map((service, index) => ({
+                    id: index + 1,
+                    ...service,
+                  }))) ||
+                []
+              }
+              columns={columns.map((column, index) => ({
+                ...column,
+                renderCell: (params) => {
+                  const position = params.row.id;
+                  let textColor = "black";
 
-                if (position === 1) {
-                  textColor = "gold";
-                } else if (position === 2) {
-                  textColor = "silver";
-                } else if (position === 3) {
-                  textColor = "#cd7f32";
-                }
+                  if (position === 1) {
+                    textColor = "gold";
+                  } else if (position === 2) {
+                    textColor = "silver";
+                  } else if (position === 3) {
+                    textColor = "#cd7f32";
+                  }
 
-                return <div style={{ color: textColor }}>{params.value}</div>;
-              },
-            }))}
-          />
+                  return <div style={{ color: textColor }}>{params.value}</div>;
+                },
+              }))}
+            />
+          </Box>
+        </Box>
+        <Box
+          gridColumn="span 6"
+          gridRow="span 2"
+          backgroundColor={theme.palette.background.alt}
+          p="1rem"
+          borderRadius="0.55rem"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+              borderRadius: "5rem",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.background.alt,
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.secondary[200]} !important`,
+            },
+          }}
+        >
+          <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+            <Header
+              title={
+                context.language === "en" ? "Top Clients" : "اكثر العملاء شراءا"
+              }
+            />
+            <DataGrid
+              autoPageSize
+              localeText={context.language === "ar" && arabicLocaleText}
+              loading={state.loading}
+              rows={
+                (data &&
+                  data.TopClients.map((client, index) => ({
+                    id: index + 1,
+                    ...client,
+                  }))) ||
+                []
+              }
+              columns={clientColumns.map((column, index) => ({
+                ...column,
+                renderCell: (params) => {
+                  const position = params.row.id;
+                  let textColor = "black";
+                  if (position === 1) {
+                    textColor = "gold";
+                  } else if (position === 2) {
+                    textColor = "silver";
+                  } else if (position === 3) {
+                    textColor = "#cd7f32";
+                  }
+
+                  return <div style={{ color: textColor }}>{params.value}</div>;
+                },
+              }))}
+            />
+          </Box>
         </Box>
         <Box
           gridColumn="span 6"
           gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
+          backgroundColor={theme.palette.background.alt}
+          p={"1rem"}
+          borderRadius="0.55rem"
         >
-          <DataGrid
-            autoPageSize
-            localeText={context.language === "ar" && arabicLocaleText}
-            loading={state.loading}
-            rows={
-              (data &&
-                data.TopClients.map((client, index) => ({
-                  id: index + 1,
-                  ...client,
-                }))) ||
-              []
-            }
-            columns={clientColumns.map((column, index) => ({
-              ...column,
-              renderCell: (params) => {
-                const position = params.row.id;
-                let textColor = "black";
-                if (position === 1) {
-                  textColor = "gold";
-                } else if (position === 2) {
-                  textColor = "silver";
-                } else if (position === 3) {
-                  textColor = "#cd7f32";
-                }
-
-                return <div style={{ color: textColor }}>{params.value}</div>;
-              },
-            }))}
-          />
+          <Header title={context.language === 'en' ? "Services Chart" : "رسم الخدمات"} />
+          <PieChart />
+        </Box>
+        <Box
+          gridColumn="span 6"
+          gridRow="span 3"
+          backgroundColor={theme.palette.background.alt}
+          p={"1rem"}
+          borderRadius="0.55rem"
+        >
+          <Header title={"Services Chart"} />
+          <BarChart />
         </Box>
       </Box>
     </Box>

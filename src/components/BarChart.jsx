@@ -141,6 +141,14 @@ const BarChart = ({ isDashboard = false }) => {
       // keys={data.flatMap((d) =>
       //   context.language === "en" ? d.name : d.nameAR
       // )}
+      keys={[
+        'hot dog',
+        'burger',
+        'sandwich',
+        'kebab',
+        'fries',
+        'donut'
+    ]}
       indexBy="category"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}

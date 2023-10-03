@@ -59,13 +59,13 @@ const Users = () => {
       flex: 0.5,
     },
     {
-      field: context.language === "en" ? "email" : "الايميل",
-      headerName: "Email",
+      field: "email",
+      headerName: context.language === "en" ? "Email" : "الايميل",
       flex: 0.5,
     },
     {
-      field: context.language === "en" ? "role" : "النوع",
-      headerName: "role",
+      field: "role",
+      headerName: context.language === "en" ? "Role" : "النوع",
       flex: 1,
       renderCell: ({ row: { role } }) => {
         return (

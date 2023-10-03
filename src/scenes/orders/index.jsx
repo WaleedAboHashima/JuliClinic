@@ -71,6 +71,20 @@ const Orders = () => {
       valueGetter: (value) => value.row.service.name,
     },
     {
+      field: 'doctor',
+      headerName: context.language === "en" ? "Doctor" : "الطبيب",
+      flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter : (value) => value.row.doctor.name
+    },
+    {
+      field: 'assistances',
+      headerName: context.language === "en" ? "Assistances" : "المساعدين",
+      flex: 0.5,
+      cellClassName: "custom-cell-class",
+      valueGetter : (value) => value.row.assistances[0].name
+    },
+    {
       field: "amount_paid",
       headerName: context.language === "en" ? "Amount Paid" : "المدفوع",
       flex: 0.5,

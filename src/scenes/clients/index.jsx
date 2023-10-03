@@ -115,14 +115,16 @@ const Clients = () => {
                 <Edit color="primary" />
               </Tooltip>
             </IconButton>
-            <IconButton
-              onClick={() => {
-                setUserDetails({ _id, fullName });
-                setFormOpen(true);
-              }}
-            >
-              <Delete color="error" />
-            </IconButton>
+            {isAdmin && (
+              <IconButton
+                onClick={() => {
+                  setUserDetails({ _id, fullName });
+                  setFormOpen(true);
+                }}
+              >
+                <Delete color="error" />
+              </IconButton>
+            )}
           </>
         );
       },
@@ -277,11 +279,7 @@ const Clients = () => {
             id: index + 1,
             ...user,
           }))}
-          columns={
-            isAdmin
-              ? columns
-              : columns.filter((column) => column.field !== "actions")
-          }
+          columns={columns}
         />
       </Box>
       <Dialog

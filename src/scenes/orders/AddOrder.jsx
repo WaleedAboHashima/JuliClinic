@@ -64,7 +64,7 @@ const AddOrder = () => {
   const [results, setResults] = useState([]);
   const searchState = useSelector((state) => state.SearchClient);
   const [isOldClient, setIsOldClient] = useState(0);
-
+  const minDate = dayjs().startOf("day");
   //client
   const [fullName, setFullName] = useState();
   const [phone, setPhone] = useState();
@@ -429,6 +429,7 @@ const AddOrder = () => {
                       format="DD/MM/YYYY"
                       defaultValue={dayjs(new Date())}
                       value={date.format("DD-MM-YYYY")}
+                      minDate={minDate}
                       onChange={(value) => {
                         setDate(value);
                       }}

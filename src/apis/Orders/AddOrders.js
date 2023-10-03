@@ -40,6 +40,8 @@ export const AddOrdersHandler = createAsyncThunk(
       return {
         message: err.response.data.message,
         status: err.response.status,
+        data: err.response.data.anthorTime
+      
       };
     }
   }
@@ -63,7 +65,7 @@ const AddOrderSlice = createSlice({
         state.data = {};
         state.state = "Error";
         state.status = action.payload.status;
-        state.error = action.payload.message;
+        state.error = action.payload.data;
       }
     });
     builder.addCase(AddOrdersHandler.rejected, (state) => {

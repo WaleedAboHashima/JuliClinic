@@ -192,23 +192,6 @@ const AddClient = () => {
                       ? "Select a country"
                       : "اختر مدينه"}
                   </MenuItem>
-                  {/* {egyptGovernorates
-                    .filter(
-                      (government) =>
-                        government.governorate === selectedGovernment
-                    )
-                    .map((gov) =>
-                      gov.cities.map((city) => (
-                        <MenuItem
-                          dir={context.language === "en" ? "ltr" : "rtl"}
-                          value={city}
-                          key={city}
-                        >
-                          {city}
-                        </MenuItem>
-                      ))
-                    )} */}
-
                   {countries.map((country) => (
                     <MenuItem
                       dir={context.language === "en" ? "ltr" : "rtl"}

@@ -184,15 +184,12 @@ const Order = () => {
           <Typography>
             Name:{" "}
             {order.client &&
-              `${order.client.firstName} ${order.client.middleName} ${order.client.lastName}`}
+              `${order.client.full_name}`}
           </Typography>
           <Typography>Code: {order.client && order.client.code}</Typography>
           <Typography>Phone: {order.client && order.client.phone}</Typography>
           <Typography>
             Doctor Name: {order.doctor && `${order.doctor.name}`}
-          </Typography>
-          <Typography>
-            Call Center: {order.call_center && `${order.call_center.name}`}
           </Typography>
           <Typography>
             Service Name: {order.service && order.service.name}

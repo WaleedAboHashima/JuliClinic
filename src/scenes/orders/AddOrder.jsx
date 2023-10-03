@@ -426,9 +426,9 @@ const AddOrder = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{ width: "100%" }}
-                      format="DD/MM/YYYY"
+                      format="DD-MM-YYYY"
                       defaultValue={dayjs(new Date())}
-                      value={date.format("DD-MM-YYYY")}
+                      value={date}
                       minDate={minDate}
                       onChange={(value) => {
                         setDate(value);
@@ -445,6 +445,7 @@ const AddOrder = () => {
                       }}
                     />
                   </LocalizationProvider>
+
                   <Header
                     title={
                       isArabic

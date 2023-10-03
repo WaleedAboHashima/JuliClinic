@@ -142,12 +142,11 @@ const Attendance = () => {
         }
       },
     },
-    type === "daily" &&
+    (type === "monthly" || type === "yearly") &&
     {
-      field: "Date",
-      headerName: context.language === "en" ? "Date" : "التاريخ",
+      field: "counter",
+      headerName: context.language === "en" ? "No. of days" : "عدد الحضور",
       flex: 0.5,
-      valueGetter: ({ row }) => row.Date.substring(0,10),
     },
   ].filter(Boolean);
   const day = date.$D;

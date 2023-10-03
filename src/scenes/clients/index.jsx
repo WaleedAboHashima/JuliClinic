@@ -62,7 +62,6 @@ const Clients = () => {
   const [phone, setPhone] = useState();
   const [selectedCountry, setSelectedCountry] = useState("none");
   const [selectedGovernment, setSelectedGovernment] = useState("none");
-  console.log(userDetails);
   const [orders, setOrders] = useState([]);
   const columns = [
     {

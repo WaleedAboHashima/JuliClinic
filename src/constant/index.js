@@ -1,5 +1,5 @@
-// export const baseURL = "https://clinic-icib.onrender.com";
-export const baseURL = "http://localhost:8080";
+export const baseURL = "https://clinic-icib.onrender.com";
+// export const baseURL = "http://localhost:8080";
 
 export const countries = [
   { name: "Afghanistan", arabicName: "أفغانستان", shortcut: "AF" },

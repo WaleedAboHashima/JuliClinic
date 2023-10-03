@@ -185,8 +185,6 @@ const Orders = () => {
         <Box display={"flex"} gap={2}>
           <Button
             sx={{
-              display:
-                cookies.get("_auth_role") === "Admin" ? "inlineblock" : "none",
               backgroundColor: theme.palette.primary[500],
               color: theme.palette.secondary[200],
               fontSize: "14px",

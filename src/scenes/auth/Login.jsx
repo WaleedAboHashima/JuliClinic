@@ -128,17 +128,17 @@ const Login = () => {
         borderRadius={10}
         backgroundColor={theme.palette.background.alt}
         padding="20px" // Add some padding
-        width={{ xs: "100%", sm: "80%", md: "60%", lg: "40%", xl: '30%' }} // Use responsive width
+        width={{ xs: "100%", sm: "80%", md: "60%", lg: "40%", xl: "30%" }} // Use responsive width
         textAlign={context.language === "en" ? "right" : "left"}
       >
         <Box>
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
-              <DarkModeOutlinedIcon sx={{ fontSize: "25px", color: "white" }} />
-            ) : (
               <LightModeOutlinedIcon
                 sx={{ fontSize: "25px", color: "white" }}
               />
+            ) : (
+              <DarkModeOutlinedIcon sx={{ fontSize: "25px", color: "white" }} />
             )}
           </IconButton>
           <IconButton

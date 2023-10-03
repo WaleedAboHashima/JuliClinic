@@ -12,7 +12,7 @@ import {
 import FlexBetween from "components/FlexBetween";
 import { useDispatch } from "react-redux";
 import { setMode } from "state";
-import profileImage from "assets/profile.jpeg";
+import profileImage from "assets/Logo.jpg";
 import {
   AppBar,
   Button,
@@ -74,9 +74,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
         <FlexBetween gap="1.5rem">
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
-              <DarkModeOutlined sx={{ fontSize: "25px" }} />
-            ) : (
               <LightModeOutlined sx={{ fontSize: "25px" }} />
+            ) : (
+              <DarkModeOutlined sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
           <IconButton
@@ -136,7 +136,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={() => handleLogOut()}>{context.language === "en" ? "Logout" : "تسجيل الخروج"}</MenuItem>
+              <MenuItem onClick={() => handleLogOut()}>
+                {context.language === "en" ? "Logout" : "تسجيل الخروج"}
+              </MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>

@@ -44,6 +44,7 @@ const Order = () => {
   const [newDate, setNewDate] = useState();
   const [assistances, setAssistances] = useState([]);
   const [newTime, setNewTime] = useState();
+  const isArabic = context.language === "ar";
 
   const handleAddFields = () => {
     const newField = { id: Date.now(), key: "", value: "" };
@@ -96,8 +97,8 @@ const Order = () => {
   useEffect(() => {
     dispatch(GetOrderHandler({ _id: params.id })).then((res) => {
       if (res.payload.status === 200) {
-        const date = dayjs(res.payload.data.order.date, "DD-MM-YYYY");
-        const time = dayjs(res.payload.data.order.time, "HH:mm");
+        const date = dayjs(res.payload.data.order.date.substring(0,10), "YYYY-MM-DD");
+        const time = dayjs(res.payload.data.order.date.substring(11,19), "HH:mm");
         setDate(date);
         setTime(time);
         setOrder(res.payload.data.order);
@@ -181,41 +182,41 @@ const Order = () => {
             gap: 3,
           }}
         >
-          <Typography>
-            Name:{" "}
+          <Typography fontSize={18}>
+            {isArabic ? "الأسم : " : "Name :"}
             {order.client &&
               `${order.client.full_name}`}
           </Typography>
-          <Typography>Code: {order.client && order.client.code}</Typography>
-          <Typography>Phone: {order.client && order.client.phone}</Typography>
-          <Typography>
-            Doctor Name: {order.doctor && `${order.doctor.name}`}
+          <Typography fontSize={18}>{isArabic ? "الكود : " : "Code : "} {order.client && order.client.code}</Typography>
+          <Typography fontSize={18}> {isArabic ? "رقم الهاتف : " : "Phone:"} {order.client && order.client.phone}</Typography>
+          <Typography fontSize={18}>
+            {isArabic ? "أسم الطبيب : " : "Doctor Name:"} {order.doctor && `${order.doctor.name}`}
           </Typography>
-          <Typography>
-            Service Name: {order.service && order.service.name}
+          <Typography fontSize={18}>
+            {isArabic ? "أسم الخدمه : " : "Service Name:"} {order.service && order.service.name}
           </Typography>
-          <Typography>
-            Service Price: {order.service && order.service.price}
+          <Typography fontSize={18}>
+            {isArabic ? "سعر الخدمه : " : "Service Price:"} {order.service && order.service.price}
           </Typography>
-          <Header title={"Assistances"} />
+          <Header title={isArabic ? "المساعدين" : "Assistances"} />
           <Select
             disabled={isEdit ? false : true}
             multiple
-            value={isEdit ? selectedAssistance : assistances}
+            value={isEdit ? selectedAssistance : assistances.map((assistance) => assistance.name)}
             onChange={(e) => setSelectedAssistance(e.target.value)}
           >
             {assistances &&
               assistances.map((assistance) => (
-                <MenuItem key={assistance._id} value={assistance.name}>
+                <MenuItem key={assistance._id} value={!isEdit ? assistance.name : assistance._id}>
                   {assistance.name}
                 </MenuItem>
               ))}
           </Select>
-          <Header title={"Additional Info"} />
+          <Header title={isArabic ? "معلومات اضافيه" : "Additional Info"} />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disabled={isEdit ? false : true}
-              format="DD/MM/YYYY"
+              format="YYYY/MM/DD"
               defaultValue={dayjs(new Date())}
               value={date}
               onChange={(value) => {

@@ -36,6 +36,7 @@ import { useTheme } from "@emotion/react";
 import { Search } from "@mui/icons-material";
 import { SearchClientHandler } from "apis/data/Clients/SearchClients";
 import { AddClientHandler } from "apis/data/Clients/AddClient";
+import { GetServiceHandler } from "apis/Services/GetService";
 const AddOrder = () => {
   const context = useContext(LanguageContext);
   const dispatch = useDispatch();
@@ -82,6 +83,14 @@ const AddOrder = () => {
     },
   };
 
+  const handleGetDocotor = (id) => {
+    dispatch(GetServiceHandler({ id })).then((res) => {
+      if (res.payload.status === 200) {
+        setDoctors(res.payload.data.service.doctors);
+      }
+    });
+  };
+
   const handleAddClient = () => {
     dispatch(
       AddClientHandler({ phone, fullName, country: selectedCountry })
@@ -123,7 +132,7 @@ const AddOrder = () => {
       })
     ).then((res) => {
       if (res.payload.status === 201) {
-        window.location.pathname = "/orders";
+        window.location.pathname = `/order/${res.payload.data.order._id}`;
       } else if (res.payload.status === 409) {
         setError(
           isArabic
@@ -178,7 +187,7 @@ const AddOrder = () => {
         const doctors = res.payload.data.StaffList.filter(
           (staff) => staff.type === "DOCTOR"
         );
-        setDoctors(doctors);
+        // setDoctors(doctors);
         setAssistances(assistances);
       }
       dispatch(GetServicesHandler()).then((res) => {
@@ -248,40 +257,6 @@ const AddOrder = () => {
                     context.language === "en" ? "Phone" : "رقم الهاتف"
                   }
                 />
-                {/* <Select
-                  MenuProps={MenuProps}
-                  onChange={(e) => setSelectedGovernment(e.target.value)}
-                  dir={context.language === "en" ? "ltr" : "rtl"}
-                  sx={
-                    context.language === "ar" && {
-                      "& .MuiSvgIcon-root": {
-                        left: "7px",
-                        right: "auto",
-                      },
-                    }
-                  }
-                  fullWidth
-                  value={selectedGovernment}
-                  defaultValue={"none"}
-                >
-                  <MenuItem
-                    disabled
-                    value="none"
-                    dir={context.language === "en" ? "ltr" : "rtl"}
-                  >
-                    {context.language === "en"
-                      ? "Select a governement"
-                      : "اختر محافظه"}
-                  </MenuItem>
-                  {egyptGovernorates.map((governement) => (
-                    <MenuItem
-                      value={governement.governorate}
-                      key={governement.governorate}
-                    >
-                      {governement.governorate}
-                    </MenuItem>
-                  ))}
-                </Select> */}
                 <Select
                   MenuProps={MenuProps}
                   onChange={(e) => setSelectedCountry(e.target.value)}
@@ -354,7 +329,10 @@ const AddOrder = () => {
                     placeholder=""
                     value={selectedServices}
                     defaultValue={1}
-                    onChange={(e) => setSelectedServices(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedServices(e.target.value);
+                      handleGetDocotor(e.target.value);
+                    }}
                   >
                     <MenuItem value={1} disabled>
                       {isArabic ? "اختر الخدمه" : "Select a service"}
